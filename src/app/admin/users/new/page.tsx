@@ -16,7 +16,7 @@ export default async function CreateAdminUserPage() {
           <span className="text-white">Create User</span>
         </div>
         <h1 className="text-3xl font-bold text-white">Create New User</h1>
-        <p className="text-gray-400 mt-1">Create a new user with admin or staff access.</p>
+        <p className="text-gray-400 mt-1">Create a new staff or admin user with appropriate access levels.</p>
       </div>
 
       <div className="max-w-lg">
