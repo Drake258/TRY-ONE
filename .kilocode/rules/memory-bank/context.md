@@ -32,6 +32,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Fix session cookie: set secure=false for sandbox HTTP compatibility
 - [x] Change currency from USD ($) to Ghanaian Cedis (₵)
 - [x] Fix staff user creation: add role selection dropdown to create user form
+- [x] Add Services tab to admin sidebar with full CRUD operations
 
 ## Current Structure
 
@@ -42,11 +43,12 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `src/app/login/page.tsx` | Staff login portal | ✅ Ready |
 | `src/app/admin/page.tsx` | Admin dashboard | ✅ Ready |
 | `src/app/admin/products/` | Product management | ✅ Ready |
+| `src/app/admin/services/` | Service management | ✅ Ready |
 | `src/app/admin/users/` | User management | ✅ Ready |
 | `src/app/admin/logs/page.tsx` | Activity audit logs | ✅ Ready |
 | `src/app/admin/reports/page.tsx` | Reports & CSV export | ✅ Ready |
 | `src/app/admin/settings/page.tsx` | System settings | ✅ Ready |
-| `src/db/schema.ts` | DB schema (5 tables) | ✅ Ready |
+| `src/db/schema.ts` | DB schema (6 tables) | ✅ Ready |
 | `src/db/seed.ts` | Seed data + admin user | ✅ Ready |
 | `src/lib/auth.ts` | Auth utilities | ✅ Ready |
 | `src/components/admin/` | Admin UI components | ✅ Ready |
@@ -57,6 +59,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 |-------|---------|
 | `users` | Staff accounts (admin/staff roles) |
 | `products` | Product catalog with specs |
+| `services` | Service offerings (repairs, installations, etc.) |
 | `activity_logs` | Audit trail of all actions |
 | `system_settings` | Configurable site settings |
 | `sessions` | User session management |
