@@ -37,6 +37,16 @@ export async function initializeDatabase() {
         role: "admin",
         status: "active",
       });
+    } else {
+      // Ensure Blessing is always an admin
+      const admin = existingAdmin[0];
+      if (admin.role !== "admin") {
+        await db
+          .update(users)
+          .set({ role: "admin" })
+          .where(eq(users.id, admin.id));
+        console.log("✅ Updated user 'Blessing' to admin role");
+      }
     }
 
     // Seed system settings
