@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "RIGHTCLICK COMPUTER DIGITALS — We give you options.",
+  description: "Your one-stop destination for computers, laptops, accessories, and professional repair services. RIGHTCLICK COMPUTER DIGITALS — We give you options.",
 };
 
 export default function RootLayout({
