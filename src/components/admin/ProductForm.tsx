@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 type ProductData = {
@@ -81,6 +81,56 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
 
   const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-600 text-sm";
   const labelClass = "block text-gray-300 text-sm font-medium mb-1.5";
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setError("Invalid file type. Allowed: JPG, JPEG, PNG, WebP");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError("File too large. Maximum size: 5MB");
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      
+      if (!res.ok) {
+        setError(data.error || "Failed to upload image");
+        return;
+      }
+
+      setForm((prev) => ({ ...prev, imageUrl: data.imageUrl }));
+    } catch {
+      setError("Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function handleUrlChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setForm((prev) => ({ ...prev, imageUrl: e.target.value }));
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -116,8 +166,66 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
             <textarea name="description" value={form.description} onChange={handleChange} rows={3} className={inputClass} placeholder="Product description..." />
           </div>
           <div className="md:col-span-2">
-            <label className={labelClass}>Image URL</label>
-            <input type="url" name="imageUrl" value={form.imageUrl} onChange={handleChange} className={inputClass} placeholder="https://..." />
+            <label className={labelClass}>Product Image</label>
+            <div className="space-y-3">
+              {/* Current Image Preview */}
+              {form.imageUrl && (
+                <div className="relative inline-block">
+                  <img 
+                    src={form.imageUrl} 
+                    alt="Product preview" 
+                    className="h-24 w-24 object-cover rounded-lg border border-gray-600"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23374151" width="100" height="100"/><text x="50" y="50" fill="%239ca3af" text-anchor="middle" dy=".3em" font-size="12">No Image</text></svg>';
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setForm((prev) => ({ ...prev, imageUrl: "" }))}
+                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              
+              {/* URL Input */}
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  name="imageUrl"
+                  value={form.imageUrl}
+                  onChange={handleUrlChange}
+                  className={inputClass}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+              
+              {/* File Upload */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    onChange={handleFileUpload}
+                    disabled={uploading}
+                    className="hidden"
+                    id="product-image-upload"
+                  />
+                  <label
+                    htmlFor="product-image-upload"
+                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-600 hover:border-blue-500 cursor-pointer transition ${uploading ? 'opacity-50 cursor-not-allowed' : 'bg-gray-800 hover:bg-gray-700'} text-white text-sm`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {uploading ? "Uploading..." : "Upload Image"}
+                  </label>
+                </div>
+                <span className="text-gray-500 text-xs">JPG, PNG, WebP (max 5MB)</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
