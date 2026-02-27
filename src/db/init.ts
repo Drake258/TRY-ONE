@@ -49,6 +49,33 @@ export async function initializeDatabase() {
       }
     }
 
+    // Seed admin user: Boss
+    const existingBoss = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, "Boss"));
+
+    if (existingBoss.length === 0) {
+      const bossPasswordHash = await hashPassword("Boss@Rightclick");
+      await db.insert(users).values({
+        username: "Boss",
+        passwordHash: bossPasswordHash,
+        role: "admin",
+        status: "active",
+      });
+      console.log("✅ Admin user 'Boss' created");
+    } else {
+      // Ensure Boss is always an admin
+      const boss = existingBoss[0];
+      if (boss.role !== "admin") {
+        await db
+          .update(users)
+          .set({ role: "admin" })
+          .where(eq(users.id, boss.id));
+        console.log("✅ Updated user 'Boss' to admin role");
+      }
+    }
+
     // Seed system settings
     const defaultSettings = [
       { key: "site_name", value: "RIGHTCLICK COMPUTER DIGITALS" },
