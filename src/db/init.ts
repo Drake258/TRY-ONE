@@ -1,6 +1,6 @@
 import { runMigrations } from "@kilocode/app-builder-db";
 import { db } from "./index";
-import { users, products, systemSettings } from "./schema";
+import { users, products, systemSettings, services } from "./schema";
 import { eq } from "drizzle-orm";
 
 // Simple password hashing using Web Crypto API (SHA-256 with salt)
@@ -172,6 +172,103 @@ export async function initializeDatabase() {
             "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=600",
           inStock: true,
           featured: false,
+        },
+      ]);
+    }
+
+    // Seed sample services
+    const existingServices = await db.select().from(services);
+    if (existingServices.length === 0) {
+      await db.insert(services).values([
+        {
+          name: "Computer Repair",
+          category: "repair",
+          description: "Professional computer repair services for all makes and models. Hardware and software issues.",
+          price: 50.00,
+          duration: "1-2 hours",
+          featured: true,
+          active: true,
+        },
+        {
+          name: "Virus & Malware Removal",
+          category: "repair",
+          description: "Complete system cleanup to remove viruses, malware, spyware, and unwanted programs.",
+          price: 79.99,
+          duration: "2-4 hours",
+          featured: true,
+          active: true,
+        },
+        {
+          name: "Screen Replacement",
+          category: "repair",
+          description: "Fast and professional screen replacement for laptops, tablets, and monitors.",
+          price: 149.99,
+          duration: "1-2 days",
+          featured: false,
+          active: true,
+        },
+        {
+          name: "Windows Installation",
+          category: "installation",
+          description: "Professional Windows OS installation with drivers and essential software setup.",
+          price: 59.99,
+          duration: "2-3 hours",
+          featured: true,
+          active: true,
+        },
+        {
+          name: "Software Installation",
+          category: "installation",
+          description: "Installation and configuration of software applications including Microsoft Office, Adobe, and more.",
+          price: 29.99,
+          duration: "30 min - 1 hour",
+          featured: false,
+          active: true,
+        },
+        {
+          name: "Network Setup",
+          category: "installation",
+          description: "Home or office network setup including routers, access points, and security configuration.",
+          price: 99.99,
+          duration: "2-4 hours",
+          featured: false,
+          active: true,
+        },
+        {
+          name: "System Maintenance",
+          category: "maintenance",
+          description: "Regular system maintenance including cleaning, updates, and performance optimization.",
+          price: 49.99,
+          duration: "1-2 hours",
+          featured: false,
+          active: true,
+        },
+        {
+          name: "Data Backup Setup",
+          category: "maintenance",
+          description: "Set up automated backup solutions to protect your important files and data.",
+          price: 69.99,
+          duration: "1-2 hours",
+          featured: false,
+          active: true,
+        },
+        {
+          name: "IT Consultation",
+          category: "consultation",
+          description: "Expert IT advice and recommendations for your home or business technology needs.",
+          price: 39.99,
+          duration: "30 minutes",
+          featured: false,
+          active: true,
+        },
+        {
+          name: "Data Recovery",
+          category: "other",
+          description: "Recover lost or corrupted data from hard drives, SSDs, USB drives, and memory cards.",
+          price: 199.99,
+          duration: "1-3 days",
+          featured: true,
+          active: true,
         },
       ]);
     }

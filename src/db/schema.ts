@@ -57,3 +57,17 @@ export const sessions = sqliteTable("sessions", {
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const services = sqliteTable("services", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  category: text("category", { enum: ["repair", "installation", "maintenance", "consultation", "other"] }).notNull().default("repair"),
+  description: text("description"),
+  price: real("price").notNull(),
+  duration: text("duration"), // e.g., "1 hour", "2 days"
+  featured: integer("featured", { mode: "boolean" }).notNull().default(false),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  createdBy: integer("created_by"),
+});
