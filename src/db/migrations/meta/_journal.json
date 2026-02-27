@@ -8,6 +8,13 @@
       "when": 1772187304384,
       "tag": "0000_abandoned_spot",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1772187304385,
+      "tag": "0001_services_table",
+      "breakpoints": true
     }
   ]
 }
