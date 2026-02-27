@@ -31,6 +31,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Fix post-login redirect: use window.location.href instead of router.push to ensure cookie is sent
 - [x] Fix session cookie: set secure=false for sandbox HTTP compatibility
 - [x] Change currency from USD ($) to Ghanaian Cedis (₵)
+- [x] Fix staff user creation: add role selection dropdown to create user form
 
 ## Current Structure
 
