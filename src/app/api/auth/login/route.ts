@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies();
     cookieStore.set("rightclick_session", sessionId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "lax",
       maxAge: 24 * 60 * 60,
       path: "/",
