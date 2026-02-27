@@ -33,6 +33,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Change currency from USD ($) to Ghanaian Cedis (₵)
 - [x] Fix staff user creation: add role selection dropdown to create user form
 - [x] Add Services tab to admin sidebar with full CRUD operations
+- [x] Ensure Blessing user always has admin role in database initialization
 
 ## Current Structure
 
