@@ -26,6 +26,8 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] System settings (site info, contact, security)
 - [x] Role-based access control (admin vs staff)
 - [x] Seed: admin user Blessing/Bless@2011 + 8 sample products
+- [x] Show/hide password toggle on login page
+- [x] Auto-migrate and seed database on first request (src/db/init.ts)
 
 ## Current Structure
 
