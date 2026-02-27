@@ -34,6 +34,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Fix staff user creation: add role selection dropdown to create user form
 - [x] Add Services tab to admin sidebar with full CRUD operations
 - [x] Ensure Blessing user always has admin role in database initialization
+- [x] Fix Boss admin user: add Boss user creation to src/db/init.ts (was only in seed.ts)
 
 ## Current Structure
 
@@ -70,6 +71,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | Username | Password | Role |
 |----------|----------|------|
 | Blessing | Bless@2011 | admin |
+| Boss | Boss@Rightclick | admin |
 
 ## API Routes
 
