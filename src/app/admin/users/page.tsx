@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
           href="/admin/users/new"
           className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
         >
-          <span>+</span> Create Admin User
+          <span>+</span> Create User
         </Link>
       </div>
 

@@ -12,6 +12,7 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [role, setRole] = useState<"admin" | "staff">("admin");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,14 +34,14 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
       const res = await fetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, role: "admin", createdBy }),
+        body: JSON.stringify({ username, password, role, createdBy }),
       });
 
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || "Failed to create user");
       } else {
-        setSuccess(`Admin user "${username}" created successfully!`);
+        setSuccess(`${role === "admin" ? "Admin" : "Staff"} user "${username}" created successfully!`);
         setTimeout(() => {
           router.push("/admin/users");
           router.refresh();
@@ -125,10 +126,17 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
         </div>
 
         <div className="bg-gray-800/50 rounded-lg p-3 flex items-center gap-3">
-          <span className="text-yellow-400 text-lg">🛡️</span>
-          <div>
-            <div className="text-white text-sm font-medium">Role: Admin</div>
-            <div className="text-gray-500 text-xs">Full administrative access will be automatically assigned</div>
+          <span className="text-yellow-400 text-lg">{role === "admin" ? "🛡️" : "👤"}</span>
+          <div className="flex-1">
+            <label className="block text-gray-300 text-sm font-medium mb-1.5">Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value as "admin" | "staff")}
+              className={inputClass}
+            >
+              <option value="admin">Admin - Full access</option>
+              <option value="staff">Staff - Limited access</option>
+            </select>
           </div>
         </div>
 
@@ -147,7 +155,7 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
                 Creating...
               </>
             ) : (
-              "Create Admin User"
+              `Create ${role === "admin" ? "Admin" : "Staff"} User`
             )}
           </button>
           <button

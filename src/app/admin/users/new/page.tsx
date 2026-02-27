@@ -13,10 +13,10 @@ export default async function CreateAdminUserPage() {
         <div className="flex items-center gap-2 text-gray-400 text-sm mb-3">
           <Link href="/admin/users" className="hover:text-white transition">Users</Link>
           <span>/</span>
-          <span className="text-white">Create Admin User</span>
+          <span className="text-white">Create User</span>
         </div>
-        <h1 className="text-3xl font-bold text-white">Create Admin User</h1>
-        <p className="text-gray-400 mt-1">Create a new admin user with full administrative access.</p>
+        <h1 className="text-3xl font-bold text-white">Create New User</h1>
+        <p className="text-gray-400 mt-1">Create a new user with admin or staff access.</p>
       </div>
 
       <div className="max-w-lg">
