@@ -34,6 +34,25 @@ async function seed() {
     console.log("ℹ️  Admin user 'Blessing' already exists");
   }
 
+  // Create admin user: Boss
+  const existingBoss = await db
+    .select()
+    .from(users)
+    .where(eq(users.username, "Boss"));
+
+  if (existingBoss.length === 0) {
+    const bossPasswordHash = await hashPassword("Boss@Rightclick");
+    await db.insert(users).values({
+      username: "Boss",
+      passwordHash: bossPasswordHash,
+      role: "admin",
+      status: "active",
+    });
+    console.log("✅ Admin user 'Boss' created");
+  } else {
+    console.log("ℹ️  Admin user 'Boss' already exists");
+  }
+
   // Seed system settings
   const defaultSettings = [
     { key: "site_name", value: "RIGHTCLICK COMPUTER DIGITALS" },

@@ -71,3 +71,15 @@ export const services = sqliteTable("services", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   createdBy: integer("created_by"),
 });
+
+export const applications = sqliteTable("applications", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  fullName: text("full_name").notNull(),
+  phoneNumber: text("phone_number").notNull(),
+  email: text("email").notNull(),
+  cvPath: text("cv_path"),
+  status: text("status", { enum: ["pending", "reviewed", "accepted", "rejected"] }).notNull().default("pending"),
+  notes: text("notes"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
