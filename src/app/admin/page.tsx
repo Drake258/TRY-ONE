@@ -145,7 +145,7 @@ export default async function AdminDashboard() {
                     <div className="text-white text-sm font-medium">{product.name}</div>
                     <div className="text-gray-500 text-xs capitalize">{product.category}</div>
                   </div>
-                  <div className="text-blue-400 font-semibold text-sm">${product.price.toFixed(2)}</div>
+                  <div className="text-blue-400 font-semibold text-sm">₵{product.price.toFixed(2)}</div>
                 </div>
               ))
             )}

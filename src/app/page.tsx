@@ -291,7 +291,7 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         <div className="flex items-center justify-between mt-4">
-          <span className="text-2xl font-bold text-blue-400">${product.price.toFixed(2)}</span>
+          <span className="text-2xl font-bold text-blue-400">₵{product.price.toFixed(2)}</span>
           <span className={`text-xs px-2 py-1 rounded-full ${product.inStock ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>
             {product.inStock ? "In Stock" : "Out of Stock"}
           </span>

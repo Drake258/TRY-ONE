@@ -99,7 +99,7 @@ export default async function ReportsPage() {
                   <span className="text-gray-300 text-sm capitalize">{cat.category}</span>
                   <div className="flex items-center gap-4">
                     <span className="text-gray-400 text-sm">{cat.count} items</span>
-                    <span className="text-blue-400 text-sm font-medium">${Number(cat.avgPrice).toFixed(2)} avg</span>
+                    <span className="text-blue-400 text-sm font-medium">₵{Number(cat.avgPrice).toFixed(2)} avg</span>
                   </div>
                 </div>
               ))}
@@ -108,12 +108,12 @@ export default async function ReportsPage() {
 
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
             <h3 className="text-white font-medium mb-4">Inventory Value</h3>
-            <div className="text-4xl font-bold text-blue-400 mb-2">${data.products.totalValue.toFixed(2)}</div>
+            <div className="text-4xl font-bold text-blue-400 mb-2">₵{data.products.totalValue.toFixed(2)}</div>
             <div className="text-gray-400 text-sm">Total catalog value</div>
             <div className="mt-4 pt-4 border-t border-gray-800">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Avg. product price</span>
-                <span className="text-white">${data.products.total > 0 ? (data.products.totalValue / data.products.total).toFixed(2) : "0.00"}</span>
+                <span className="text-white">₵{data.products.total > 0 ? (data.products.totalValue / data.products.total).toFixed(2) : "0.00"}</span>
               </div>
             </div>
           </div>

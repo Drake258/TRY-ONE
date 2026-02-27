@@ -108,7 +108,7 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
             </select>
           </div>
           <div>
-            <label className={labelClass}>Price (USD) *</label>
+            <label className={labelClass}>Price (GHS) *</label>
             <input type="number" name="price" value={form.price} onChange={handleChange} required min="0" step="0.01" className={inputClass} placeholder="0.00" />
           </div>
           <div className="md:col-span-2">

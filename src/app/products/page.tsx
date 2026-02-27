@@ -120,7 +120,7 @@ export default async function ProductsPage() {
                     </div>
                   )}
                   <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-blue-400">${product.price.toFixed(2)}</span>
+                    <span className="text-xl font-bold text-blue-400">₵{product.price.toFixed(2)}</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${product.inStock ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>
                       {product.inStock ? "✓ In Stock" : "Out of Stock"}
                     </span>

@@ -79,7 +79,7 @@ export default async function AdminProductsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-blue-400 font-semibold">${product.price.toFixed(2)}</span>
+                      <span className="text-blue-400 font-semibold">₵{product.price.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs px-2 py-1 rounded-full ${product.inStock ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>
