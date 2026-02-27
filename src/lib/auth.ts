@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { db } from "@/db";
 import { users, sessions, activityLogs } from "@/db/schema";
 import { eq, and, gt } from "drizzle-orm";
+import { initializeDatabase } from "@/db/init";
 
 const SESSION_COOKIE = "rightclick_session";
 const SESSION_DURATION_HOURS = 24;
@@ -40,6 +41,7 @@ export async function createSession(userId: number): Promise<string> {
 }
 
 export async function getSession() {
+  await initializeDatabase();
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(SESSION_COOKIE)?.value;
   if (!sessionId) return null;

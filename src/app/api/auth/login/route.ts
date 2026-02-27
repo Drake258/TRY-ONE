@@ -4,9 +4,12 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyPassword, createSession, logActivity } from "@/lib/auth";
+import { initializeDatabase } from "@/db/init";
 
 export async function POST(request: NextRequest) {
   try {
+    await initializeDatabase();
+
     const { username, password } = await request.json();
 
     if (!username || !password) {
