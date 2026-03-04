@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { chatSessions, chatMessages, aiResponses, aiSettings, products } from "@/db/schema";
+import { chatSessions, chatMessages, aiResponses, aiSettings, products, orders } from "@/db/schema";
 import { eq, or, and, ilike, desc, sql } from "drizzle-orm";
 
 // Simple NLP-like response matching
@@ -61,7 +61,7 @@ function findBestResponse(
   if (orderKeywords.some(k => messageLower.includes(k))) {
     return {
       response: responses.find(r => r.trigger === "order status")?.response ||
-        "To check your order status, please provide your order number (format: RC-XXXXX).",
+        "To check your order status, please provide your order number (format: RC-XXXXX) or your phone number.",
       type: "order_query",
     };
   }
@@ -120,10 +120,45 @@ export async function POST(request: NextRequest) {
     // Find best response
     const aiResult = findBestResponse(message, aiResponsesData);
 
-    let responseText = aiResult?.response || "I'm here to help! Please call us at 0503819000 for immediate assistance.";
-    let messageType = aiResult?.type || "text";
+    let responseText = "";
+    let messageType = "text";
     let metadata = aiResult?.metadata;
     let escalated = false;
+
+    // If we found an order match in the message, look up the order
+    const orderMatch = message.match(/RC-[A-Z0-9-]+/i) || message.match(/TRK-[A-Z0-9-]+/i);
+    if (orderMatch) {
+      try {
+        const orderNumber = orderMatch[0].toUpperCase();
+        const orderResults = await db.select().from(orders).where(eq(orders.orderNumber, orderNumber));
+        
+        if (orderResults.length > 0) {
+          const order = orderResults[0];
+          const items = JSON.parse(order.items as string);
+          const itemList = items.map((item: any) => `• ${item.name} x${item.quantity} - ₵${item.price * item.quantity}`).join("\n");
+          
+          responseText = `**Order Details for ${order.orderNumber}**\n\n` +
+            `**Status:** ${order.status}\n` +
+            `**Tracking Number:** ${order.trackingNumber}\n` +
+            `**Payment Status:** ${order.paymentStatus}\n\n` +
+            `**Items:**\n${itemList}\n\n` +
+            `**Total:** ₵${order.totalAmount}\n\n` +
+            `Contact us at 0503819000 for any questions about your order.`;
+          messageType = "order_query";
+        } else {
+          responseText = `I couldn't find an order with number "${orderNumber}". Please check your order number and try again.`;
+          messageType = "order_query";
+        }
+      } catch (orderError) {
+        console.error("Error looking up order:", orderError);
+        responseText = aiResult?.response || "I'm here to help! Please call us at 0503819000 for immediate assistance.";
+        messageType = aiResult?.type || "text";
+      }
+    } else {
+      // Use AI response as default
+      responseText = aiResult?.response || "I'm here to help! Please call us at 0503819000 for immediate assistance.";
+      messageType = aiResult?.type || "text";
+    }
 
     // Check if escalation is needed
     if (aiResult?.metadata?.requiresEscalation) {

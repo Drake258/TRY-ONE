@@ -131,3 +131,22 @@ export const aiSettings = sqliteTable("ai_settings", {
   value: text("value").notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+// Orders table
+export const orders = sqliteTable("orders", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  orderNumber: text("order_number").notNull().unique(),
+  trackingNumber: text("tracking_number").notNull().unique(),
+  customerName: text("customer_name").notNull(),
+  customerPhone: text("customer_phone").notNull(),
+  customerEmail: text("customer_email"),
+  shippingAddress: text("shipping_address"),
+  items: text("items").notNull(), // JSON string of cart items
+  totalAmount: real("total_amount").notNull(),
+  status: text("status", { enum: ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"] }).notNull().default("pending"),
+  paymentStatus: text("payment_status", { enum: ["pending", "paid", "failed", "refunded"] }).notNull().default("pending"),
+  paymentMethod: text("payment_method"),
+  notes: text("notes"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

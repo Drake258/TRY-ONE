@@ -34,6 +34,15 @@ export default function HomePage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+  const [orderDetails, setOrderDetails] = useState<{orderNumber: string; trackingNumber: string} | null>(null);
+  
+  // Customer form state
+  const [customerForm, setCustomerForm] = useState({
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    shippingAddress: "",
+  });
   
   // Application form state
   const [appForm, setAppForm] = useState({
@@ -113,8 +122,49 @@ export default function HomePage() {
     setShowPayment(false);
   };
 
-  const confirmOrder = () => {
-    setShowPayment(true);
+  const confirmOrder = async () => {
+    // Validate customer form
+    if (!customerForm.fullName || !customerForm.phoneNumber) {
+      alert("Please enter your name and phone number");
+      return;
+    }
+
+    try {
+      const orderItems = cart.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity
+      }));
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: customerForm.fullName,
+          customerPhone: customerForm.phoneNumber,
+          customerEmail: customerForm.email || undefined,
+          shippingAddress: customerForm.shippingAddress || undefined,
+          items: orderItems,
+          totalAmount: getCartTotal(),
+        })
+      });
+
+      const data = await res.json();
+      
+      if (data.success) {
+        setOrderDetails({
+          orderNumber: data.order.orderNumber,
+          trackingNumber: data.order.trackingNumber
+        });
+        setShowPayment(true);
+      } else {
+        alert("Failed to create order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Failed to create order. Please try again.");
+    }
   };
 
   const handleApplicationSubmit = async (e: React.FormEvent) => {
@@ -558,23 +608,85 @@ export default function HomePage() {
                       </div>
                       
                       {!showPayment ? (
-                        <button
-                          onClick={confirmOrder}
-                          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-xl transition text-lg"
-                        >
-                          Confirm Order
-                        </button>
+                        <>
+                          {/* Customer Details Form */}
+                          <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4">
+                            <h3 className="text-white font-bold text-lg mb-4">Your Details</h3>
+                            <div className="space-y-4">
+                              <div>
+                                <label className="text-gray-400 text-sm mb-1 block">Full Name *</label>
+                                <input
+                                  type="text"
+                                  value={customerForm.fullName}
+                                  onChange={(e) => setCustomerForm({ ...customerForm, fullName: e.target.value })}
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  placeholder="Enter your full name"
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label className="text-gray-400 text-sm mb-1 block">Phone Number *</label>
+                                <input
+                                  type="tel"
+                                  value={customerForm.phoneNumber}
+                                  onChange={(e) => setCustomerForm({ ...customerForm, phoneNumber: e.target.value })}
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  placeholder="Enter your phone number"
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label className="text-gray-400 text-sm mb-1 block">Email (Optional)</label>
+                                <input
+                                  type="email"
+                                  value={customerForm.email}
+                                  onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })}
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  placeholder="Enter your email"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-gray-400 text-sm mb-1 block">Shipping Address (Optional)</label>
+                                <textarea
+                                  value={customerForm.shippingAddress}
+                                  onChange={(e) => setCustomerForm({ ...customerForm, shippingAddress: e.target.value })}
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  placeholder="Enter your address for delivery"
+                                  rows={2}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <button
+                            onClick={confirmOrder}
+                            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-xl transition text-lg"
+                          >
+                            Confirm Order
+                          </button>
+                        </>
                       ) : (
                         <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-6 text-center">
                           <div className="text-green-400 text-lg font-semibold mb-2">Order Confirmed!</div>
-                          <p className="text-gray-300 mb-4">Please make your payment to:</p>
-                          <div className="text-3xl font-bold text-white mb-4">Pay to this number 0548184293</div>
-                          <p className="text-gray-400 text-sm">After payment, our team will contact you for delivery.</p>
+                          <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
+                            <div className="text-gray-400 text-sm mb-1">Order Number</div>
+                            <div className="text-2xl font-bold text-white">{orderDetails?.orderNumber}</div>
+                          </div>
+                          <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
+                            <div className="text-gray-400 text-sm mb-1">Tracking Number</div>
+                            <div className="text-2xl font-bold text-orange-400">{orderDetails?.trackingNumber}</div>
+                          </div>
+                          <p className="text-gray-300 mb-2">Please make your payment to:</p>
+                          <div className="text-3xl font-bold text-white mb-4">0548184293</div>
+                          <p className="text-gray-400 text-sm mb-4">Save your Order Number and Tracking Number to track your order.</p>
+                          <p className="text-gray-400 text-sm mb-4">After payment, our team will contact you for delivery.</p>
                           <button
                             onClick={() => {
                               setCart([]);
                               setShowCheckout(false);
                               setShowPayment(false);
+                              setOrderDetails(null);
+                              setCustomerForm({ fullName: "", phoneNumber: "", email: "", shippingAddress: "" });
                               setActiveTab("home");
                             }}
                             className="mt-6 bg-orange-600 hover:bg-orange-700 text-white font-semibold px-8 py-3 rounded-xl transition"
