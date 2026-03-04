@@ -43,6 +43,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Update database schema for applications and cart
 - [x] Create API routes for cart and applications
 - [x] Add more products with prices for customer preview (24 total products)
+- [x] Fix public products API: Create /api/products endpoint for customers to view products
 
 ## Current Structure
 
@@ -93,6 +94,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `/api/admin/users/[id]` | PATCH | Update user status/role |
 | `/api/admin/settings` | POST | Update system settings |
 | `/api/admin/export` | GET | Export CSV data |
+| `/api/products` | GET | Public products for customers |
 
 ## Session History
 
