@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ChatWidget from "@/components/ChatWidget";
 
 // Types
 type Product = {
@@ -729,6 +730,9 @@ export default function HomePage() {
           </div>
         </footer>
       )}
+
+      {/* AI Chat Widget - available on all pages */}
+      <ChatWidget cartItems={cart.map((item: CartItem) => ({ id: item.product.id, name: item.product.name, price: item.product.price }))} />
     </div>
   );
 }

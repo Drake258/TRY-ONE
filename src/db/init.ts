@@ -1,6 +1,6 @@
 import { runMigrations } from "@kilocode/app-builder-db";
 import { db } from "./index";
-import { users, products, systemSettings, services } from "./schema";
+import { users, products, systemSettings, services, aiResponses, aiSettings, chatSessions, chatMessages } from "./schema";
 import { eq } from "drizzle-orm";
 
 // Simple password hashing using Web Crypto API (SHA-256 with salt)
@@ -481,6 +481,237 @@ export async function initializeDatabase() {
       }
     } catch (serviceError) {
       console.log("Services table not yet available, skipping seed data:", serviceError);
+    }
+
+    // Seed AI Assistant responses
+    try {
+      const existingAiResponses = await db.select().from(aiResponses);
+      if (existingAiResponses.length === 0) {
+        await db.insert(aiResponses).values([
+          // Greetings
+          {
+            trigger: "hello",
+            category: "greeting",
+            response: "Hello! Welcome to RIGHTCLICK COMPUTER DIGITALS. I'm here to help you with any questions about our products, services, orders, or technical support. How can I assist you today?",
+            keywords: "hello,hi,hey,good morning,good afternoon,good evening",
+            isActive: true,
+            priority: 100,
+          },
+          {
+            trigger: "help",
+            category: "greeting",
+            response: "Hi there! I'm your AI assistant at RIGHTCLICK COMPUTER DIGITALS. I can help you with:\n\n• Product information and recommendations\n• Order status tracking\n• Pricing and payment methods\n• Shipping and delivery\n• Returns and refunds\n• Technical support\n\nWhat would you like to know?",
+            keywords: "help,assist,support",
+            isActive: true,
+            priority: 90,
+          },
+          // Pricing & Products
+          {
+            trigger: "laptop prices",
+            category: "pricing",
+            response: "We offer a wide range of laptops at competitive prices:\n\n• Budget laptops: ₵5,000 - ₵8,000\n• Mid-range laptops: ₵8,000 - ₵15,000\n• High-performance laptops: ₵15,000 - ₵25,000\n• Gaming laptops: ₵18,000 - ₵35,000\n\nWould you like me to show you some specific options based on your needs?",
+            keywords: "price,laptop,computer,cost,how much,pricing",
+            isActive: true,
+            priority: 80,
+          },
+          {
+            trigger: "product availability",
+            category: "product",
+            response: "Great question! We have a large inventory of computers and accessories. Most items are in stock and ready for immediate delivery or pickup. \n\nTo check specific product availability, please let me know which item you're interested in, and I'll provide current stock status.",
+            keywords: "available,in stock,stock,have,available",
+            isActive: true,
+            priority: 75,
+          },
+          // Shipping & Delivery
+          {
+            trigger: "shipping",
+            category: "shipping",
+            response: "We offer reliable shipping and delivery services:\n\n• **Local Delivery**: Same-day delivery within Accra (orders before 2 PM)\n• **Nationwide**: 2-5 business days for other regions\n• **Pickup**: Visit our store for immediate pickup\n\nDelivery fees vary by location. Contact us for exact shipping costs to your area.",
+            keywords: "shipping,delivery,deliver,ship,transport, courier",
+            isActive: true,
+            priority: 80,
+          },
+          {
+            trigger: "delivery time",
+            category: "shipping",
+            response: "Our delivery times are:\n\n• **Accra Metro**: Same-day delivery (orders before 2 PM)\n• **Other Ghana cities**: 2-5 business days\n• **International**: 7-14 business days\n\nYou'll receive tracking information once your order is shipped.",
+            keywords: "delivery time,how long,when arrive,when will,arrival",
+            isActive: true,
+            priority: 80,
+          },
+          // Returns & Refunds
+          {
+            trigger: "return policy",
+            category: "returns",
+            response: "Our return policy:\n\n• **7 days**: Return for replacement or refund (unopened items)\n• **14 days**: Return for replacement (defective products)\n• **30 days**: Manufacturer warranty claims\n\nConditions:\n- Product must be in original condition\n- Receipt/invoice required\n- Software (if opened) cannot be returned\n\nWould you like to initiate a return?",
+            keywords: "return,refund,exchange,give back,money back",
+            isActive: true,
+            priority: 85,
+          },
+          {
+            trigger: "refund",
+            category: "returns",
+            response: "We offer refunds under these conditions:\n\n• **Full refund**: Within 7 days for unopened items\n• **Partial refund**: For used items (case-by-case)\n\nRefund timeline:\n- Processing: 5-7 business days\n- Credit card: 7-14 business days\n- Mobile Money: 3-5 business days\n\nPlease provide your order number for refund inquiries.",
+            keywords: "refund,money back,reimburse",
+            isActive: true,
+            priority: 80,
+          },
+          // Payment Methods
+          {
+            trigger: "payment methods",
+            category: "payment",
+            response: "We accept the following payment methods:\n\n• **Mobile Money (MoMo)**: Instant payment via MTN, Vodafone, AirtelTigo\n• **Bank Transfer**: Direct bank transfer to our account\n• **Card Payment**: Visa, Mastercard, GhIPSS\n• **Cash**: Pay at our physical store\n• **Layaway**: Pay in installments\n\nWhich payment method would you prefer?",
+            keywords: "payment,pay,momo,mobile money,bank transfer,card,cash,installment",
+            isActive: true,
+            priority: 90,
+          },
+          {
+            trigger: "momo payment",
+            category: "payment",
+            response: "Mobile Money (MoMo) Payment:\n\nTo pay via MoMo:\n1. Send amount to **0503819000**\n2. Include your order number as reference\n3. You'll receive confirmation SMS\n\nOur MoMo numbers:\n- MTN: 0503819000\n- Vodafone: 0503819000\n\nQuestions? We're here to help!",
+            keywords: "momo,mobile money,mtn,vodafone,airteltigo,send money",
+            isActive: true,
+            priority: 85,
+          },
+          // Order Status
+          {
+            trigger: "order status",
+            category: "order",
+            response: "To check your order status, please provide your order number. I'll look it up and give you the latest update on your order.\n\nYour order number should be in the format: **RC-XXXXX**",
+            keywords: "order,status,track,tracking,where is my order",
+            isActive: true,
+            priority: 95,
+          },
+          {
+            trigger: "order number",
+            category: "order",
+            response: "Your order number starts with **RC-** and can be found:\n\n• In your confirmation email\n• In your SMS receipt\n• On your purchase invoice\n\nPlease share your order number (or the phone number you used for ordering) so I can check your order status.",
+            keywords: "order number,order id,order number",
+            isActive: true,
+            priority: 85,
+          },
+          // Technical Support
+          {
+            trigger: "computer slow",
+            category: "support",
+            response: "I'm sorry to hear your computer is running slowly. Here are some quick fixes:\n\n1. **Restart your computer** - clears temporary files\n2. **Check storage** - ensure at least 10% free space\n3. **Update software** - Windows updates, drivers\n4. **Run antivirus scan** - remove malware\n5. **Disable startup programs** - reduces boot time\n\nIf the problem persists, we offer **Virus Removal & Tune-Up** service at ₵800. Would you like to book an appointment?",
+            keywords: "slow,laggy,not working,freeze,crash,problem",
+            isActive: true,
+            priority: 70,
+          },
+          {
+            trigger: "virus",
+            category: "support",
+            response: "If you suspect a virus, here's what to do:\n\n1. **Don't panic** - don't click suspicious links\n2. **Disconnect from internet** (if safe)\n3. **Run a scan** with Windows Defender or your antivirus\n\nOur **Virus & Malware Removal** service (₵800) can help fully clean your system. We also offer:-\n• Free basic system check\n• Data backup before cleaning\n• Security installation\n\nWould you like to schedule a service?",
+            keywords: "virus,malware,spyware,hacked,infected,security",
+            isActive: true,
+            priority: 80,
+          },
+          {
+            trigger: "repair",
+            category: "support",
+            response: "We offer professional repair services:\n\n• **Screen Replacement**: ₵1,500 - ₵3,000\n• **Keyboard Repair**: ₵300 - ₵800\n• **Battery Replacement**: ₵500 - ₵1,500\n• **Hardware Upgrade**: Quote on request\n• **Data Recovery**: ₵2,000 - ₵5,000\n\nBring your device to our store or schedule a pickup. Our technicians will diagnose and provide a quote first!\n\nWould you like to book a repair appointment?",
+            keywords: "repair,fix,broken,damage,replacement,service",
+            isActive: true,
+            priority: 75,
+          },
+          // Contact Information
+          {
+            trigger: "contact",
+            category: "general",
+            response: "You can reach us through:\n\n• **Phone**: 0503819000\n• **WhatsApp**: 0503819000\n• **Email**: info@rightclickdigitals.com\n• **Address**: Accra, Ghana\n\n**Store Hours**:\n• Monday - Friday: 8 AM - 6 PM\n• Saturday: 9 AM - 4 PM\n• Sunday: Closed\n\nWe're here to help!",
+            keywords: "contact,phone,call,email,reach,address,location",
+            isActive: true,
+            priority: 90,
+          },
+          {
+            trigger: "whatsapp",
+            category: "general",
+            response: "You can reach us on WhatsApp at **0503819000**!\n\nWe're available for quick chats and can share product images, invoices, and more. Looking forward to hearing from you!",
+            keywords: "whatsapp,wa,message,chat",
+            isActive: true,
+            priority: 85,
+          },
+          // FAQ
+          {
+            trigger: "warranty",
+            category: "faq",
+            response: "Our warranty terms:\n\n• **Laptops**: 1-year manufacturer warranty\n• **Desktops**: 1-year manufacturer warranty\n• **Accessories**: 6-month warranty\n• **Services**: 30-day service guarantee\n\nWarranty covers:\n- Manufacturing defects\n- Hardware failures (not physical damage)\n\nExtended warranty available for purchase. Would you like more details?",
+            keywords: "warranty,guarantee,coverage",
+            isActive: true,
+            priority: 75,
+          },
+          {
+            trigger: "opening hours",
+            category: "general",
+            response: "Our store hours:\n\n• **Monday - Friday**: 8:00 AM - 6:00 PM\n• **Saturday**: 9:00 AM - 4:00 PM\n• **Sunday**: Closed\n\nWe also offer online support 24/7! Feel free to browse our products anytime.",
+            keywords: "hours,open,time,when,schedule",
+            isActive: true,
+            priority: 80,
+          },
+          // Complaints
+          {
+            trigger: "complaint",
+            category: "support",
+            response: "I'm really sorry to hear about your experience. Your satisfaction is important to us.\n\nPlease share more details about your concern, and I'll escalate it to our management team immediately.\n\nYou can also reach us directly at **0503819000** for urgent matters. We're committed to resolving your issue.",
+            keywords: "complaint,unhappy,disappointed,problem,issue",
+            isActive: true,
+            priority: 100,
+          },
+          // Product Recommendations
+          {
+            trigger: "gaming laptop",
+            category: "product",
+            response: "Here are our top gaming laptops:\n\n1. **GameForce X Pro** - ₵19,000\n   - AMD Ryzen 9, 32GB RAM, RTX 4070\n\n2. **Asus ROG Strix G16** - ₵22,000\n   - Intel i9, 32GB RAM, RTX 4080\n\n3. **Omen 17** - ₵18,500\n   - Intel i7, 16GB RAM, RTX 4060\n\nAll gaming laptops come with 1-year warranty. Would you like more details or to place an order?",
+            keywords: "gaming,gamer,game,play",
+            isActive: true,
+            priority: 70,
+          },
+          {
+            trigger: "student laptop",
+            category: "product",
+            response: "Best laptops for students:\n\n1. **BudgetBook 14** - ₵5,500\n   - Intel i5, 8GB RAM, 256GB SSD\n   - Perfect for assignments and research\n\n2. **MacBook Air M3** - ₵16,000\n   - Apple M3, 16GB RAM, 512GB SSD\n   - Lightweight, long battery life\n\n3. **Lenovo ThinkPad X1** - ₵19,000\n   - Business-grade, durable\n\nWhat's your budget? I'll recommend the best option!",
+            keywords: "student,school,university,education,learning",
+            isActive: true,
+            priority: 70,
+          },
+          // Escalation
+          {
+            trigger: "speak to human",
+            category: "support",
+            response: "I understand you'd like to speak with a human agent. Let me connect you with our support team.\n\nPlease provide:\n• Your name\n• Your order number (if applicable)\n• Brief description of your issue\n\nI'll escalate this to our team who will contact you within business hours. You can also call us directly at **0503819000**.",
+            keywords: "human,agent,manager,supervisor,real person,escalate",
+            isActive: true,
+            priority: 100,
+          },
+          // Default response
+          {
+            trigger: "default",
+            category: "general",
+            response: "Thank you for contacting RIGHTCLICK COMPUTER DIGITALS!\n\nI'm here to help with:\n• Product information and recommendations\n• Order tracking and status\n• Payment and pricing inquiries\n• Technical support and repairs\n• Shipping and delivery info\n\nCould you please provide more details about your question? That way I can give you the best assistance possible!\n\nOr call us at **0503819000** for immediate support.",
+            keywords: "default",
+            isActive: true,
+            priority: 0,
+          },
+        ]);
+        console.log("✅ AI Assistant responses seeded");
+      }
+
+      // Seed AI Settings
+      const existingAiSettings = await db.select().from(aiSettings);
+      if (existingAiSettings.length === 0) {
+        await db.insert(aiSettings).values([
+          { key: "ai_enabled", value: "true" },
+          { key: "welcome_message", value: "Hello! Welcome to RIGHTCLICK COMPUTER DIGITALS. How can I help you today?" },
+          { key: "company_phone", value: "0503819000" },
+          { key: "company_email", value: "info@rightclickdigitals.com" },
+          { key: "company_address", value: "Accra, Ghana" },
+          { key: "business_hours", value: "Monday - Friday: 8 AM - 6 PM, Saturday: 9 AM - 4 PM" },
+        ]);
+        console.log("✅ AI Assistant settings seeded");
+      }
+    } catch (aiError) {
+      console.log("AI tables not yet available, skipping seed data:", aiError);
     }
   } catch (error) {
     console.error("Database initialization error:", error);

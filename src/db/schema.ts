@@ -83,3 +83,51 @@ export const applications = sqliteTable("applications", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+// AI Assistant Chat Sessions
+export const chatSessions = sqliteTable("chat_sessions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  sessionId: text("session_id").notNull().unique(),
+  customerName: text("customer_name"),
+  customerEmail: text("customer_email"),
+  customerPhone: text("customer_phone"),
+  orderNumber: text("order_number"),
+  status: text("status", { enum: ["active", "closed", "escalated"] }).notNull().default("active"),
+  isAiMode: integer("is_ai_mode", { mode: "boolean" }).notNull().default(true),
+  assignedTo: integer("assigned_to"), // admin/staff user ID
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+// AI Assistant Chat Messages
+export const chatMessages = sqliteTable("chat_messages", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  sessionId: text("session_id").notNull(),
+  message: text("message").notNull(),
+  sender: text("sender", { enum: ["customer", "ai", "admin"] }).notNull(),
+  senderName: text("sender_name"),
+  messageType: text("message_type", { enum: ["text", "order_query", "product_recommendation", "escalation"] }).notNull().default("text"),
+  metadata: text("metadata"), // JSON for additional data like product IDs, order info
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+// AI Response Templates (Editable by Admin)
+export const aiResponses = sqliteTable("ai_responses", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  trigger: text("trigger").notNull(), // Keywords that trigger this response
+  category: text("category", { enum: ["greeting", "faq", "pricing", "shipping", "returns", "payment", "product", "order", "support", "general"] }).notNull(),
+  response: text("response").notNull(),
+  keywords: text("keywords"), // Comma-separated keywords for matching
+  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
+  priority: integer("priority").notNull().default(0), // Higher priority responses are checked first
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+// AI Assistant Settings
+export const aiSettings = sqliteTable("ai_settings", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
