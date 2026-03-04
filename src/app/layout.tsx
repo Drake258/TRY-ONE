@@ -15,6 +15,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "RIGHTCLICK COMPUTER DIGITALS — We give you options.",
   description: "Your one-stop destination for computers, laptops, accessories, and professional repair services. RIGHTCLICK COMPUTER DIGITALS — We give you options.",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/logo-icon.svg', type: 'image/svg+xml' },
+    ],
+  },
 };
 
 export default function RootLayout({

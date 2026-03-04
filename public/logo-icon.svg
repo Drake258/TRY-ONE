@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Background Circle -->
+  <circle cx="40" cy="40" r="38" fill="#7C3AED"/>
+  
+  <!-- Monitor Screen -->
+  <rect x="18" y="20" width="44" height="32" rx="3" fill="#A78BFA"/>
+  <rect x="21" y="23" width="38" height="24" rx="2" fill="#EDE9FE"/>
+  
+  <!-- Stand -->
+  <rect x="32" y="52" width="16" height="8" fill="#6D28D9"/>
+  <rect x="26" y="58" width="28" height="5" rx="2" fill="#5B21B6"/>
+  
+  <!-- Click Cursor -->
+  <path d="M48 35L56 27L58 29L50 37L53 40L45 48L37 40L40 37L32 29L34 27L42 35L48 35Z" fill="#FBBF24"/>
+  <circle cx="56" cy="27" r="2.5" fill="#F59E0B"/>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <!-- Computer/Monitor Icon -->
+  <g transform="translate(20, 20)">
+    <!-- Monitor Screen -->
+    <rect x="0" y="0" width="60" height="45" rx="4" fill="#7C3AED"/>
+    <rect x="4" y="4" width="52" height="33" rx="2" fill="#A78BFA"/>
+    <!-- Monitor Stand -->
+    <rect x="22" y="45" width="16" height="12" fill="#7C3AED"/>
+    <rect x="14" y="55" width="32" height="6" rx="2" fill="#6D28D9"/>
+    <!-- Click Cursor -->
+    <path d="M45 25L55 15L58 18L48 28L52 32L42 42L32 32L36 28L26 18L29 15L39 25L45 25Z" fill="#FBBF24"/>
+    <circle cx="55" cy="15" r="3" fill="#F59E0B"/>
+  </g>
+  
+  <!-- Text: RightClick -->
+  <text x="95" y="50" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#7C3AED">
+    RightClick
+  </text>
+  
+  <!-- Text: Computer Digitals -->
+  <text x="95" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="500" fill="#6B7280">
+    Computer Digitals
+  </text>
+  
+  <!-- Tagline -->
+  <text x="95" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="400" fill="#9CA3AF">
+    Sales • Repairs • Accessories
+  </text>
+</svg>

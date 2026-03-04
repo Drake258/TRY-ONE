@@ -146,7 +146,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
       {/* Chat Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 bg-orange-500 hover:bg-orange-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 bg-violet-500 hover:bg-violet-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
         aria-label="Open chat"
       >
         {isOpen ? (
@@ -186,7 +186,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-40 w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
           {/* Header */}
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-violet-500 to-violet-600 p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                 <svg
@@ -206,7 +206,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
               </div>
               <div>
                 <h3 className="text-white font-semibold">RIGHTCLICK Assistant</h3>
-                <p className="text-orange-100 text-xs">
+                <p className="text-violet-100 text-xs">
                   {isAiMode ? "AI Powered" : "Human Support"}
                 </p>
               </div>
@@ -253,7 +253,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                     msg.sender === "customer"
-                      ? "bg-orange-500 text-white rounded-br-md"
+                      ? "bg-violet-500 text-white rounded-br-md"
                       : msg.sender === "admin"
                       ? "bg-blue-500 text-white rounded-bl-md"
                       : "bg-white text-gray-800 rounded-bl-md shadow-sm border"
@@ -268,7 +268,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                   <p
                     className={`text-xs mt-1 ${
                       msg.sender === "customer"
-                        ? "text-orange-100"
+                        ? "text-violet-100"
                         : "text-gray-400"
                     }`}
                   >
@@ -328,12 +328,12 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-full focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 text-sm"
+                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-full focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 text-sm"
               />
               <button
                 onClick={sendMessage}
                 disabled={!inputText.trim() || isLoading}
-                className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+                className="bg-violet-500 hover:bg-violet-600 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

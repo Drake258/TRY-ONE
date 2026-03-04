@@ -29,7 +29,7 @@ export default function ProductActions({ productId }: { productId: number }) {
     <div className="flex items-center gap-2 justify-end">
       <Link
         href={`/admin/products/${productId}/edit`}
-        className="text-orange-400 hover:text-orange-300 text-sm px-3 py-1.5 rounded-lg hover:bg-orange-500/10 transition"
+        className="text-violet-400 hover:text-violet-300 text-sm px-3 py-1.5 rounded-lg hover:bg-violet-500/10 transition"
       >
         Edit
       </Link>

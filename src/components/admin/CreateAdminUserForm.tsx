@@ -54,7 +54,7 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
     }
   }
 
-  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-600 text-sm";
+  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition placeholder-gray-600 text-sm";
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
@@ -144,7 +144,7 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
           <button
             type="submit"
             disabled={loading}
-            className="bg-orange-600 hover:bg-orange-700 disabled:bg-orange-800 text-white font-semibold px-6 py-3 rounded-xl transition flex items-center gap-2"
+            className="bg-violet-600 hover:bg-violet-700 disabled:bg-violet-800 text-white font-semibold px-6 py-3 rounded-xl transition flex items-center gap-2"
           >
             {loading ? (
               <>

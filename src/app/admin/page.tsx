@@ -53,14 +53,14 @@ export default async function AdminDashboard() {
   ];
 
   const colorMap: Record<string, string> = {
-    blue: "from-orange-600/20 to-orange-800/10 border-orange-500/20",
+    blue: "from-violet-600/20 to-violet-800/10 border-violet-500/20",
     purple: "from-purple-600/20 to-purple-800/10 border-purple-500/20",
     yellow: "from-yellow-600/20 to-yellow-800/10 border-yellow-500/20",
     green: "from-green-600/20 to-green-800/10 border-green-500/20",
   };
 
   const iconBg: Record<string, string> = {
-    blue: "bg-orange-600/20 text-orange-400",
+    blue: "bg-violet-600/20 text-violet-400",
     purple: "bg-purple-600/20 text-purple-400",
     yellow: "bg-yellow-600/20 text-yellow-400",
     green: "bg-green-600/20 text-green-400",
@@ -72,7 +72,7 @@ export default async function AdminDashboard() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white">Dashboard</h1>
         <p className="text-gray-400 mt-1">
-          Welcome back, <span className="text-orange-400 font-medium">{session?.user.username}</span>!
+          Welcome back, <span className="text-violet-400 font-medium">{session?.user.username}</span>!
           Here&apos;s what&apos;s happening.
         </p>
       </div>
@@ -104,11 +104,11 @@ export default async function AdminDashboard() {
               stats.categoryStats.map((cat) => {
                 const pct = stats.totalProducts > 0 ? Math.round((cat.count / stats.totalProducts) * 100) : 0;
                 const catColors: Record<string, string> = {
-                  laptop: "bg-orange-500",
+                  laptop: "bg-violet-500",
                   desktop: "bg-purple-500",
                   accessory: "bg-green-500",
                   part: "bg-yellow-500",
-                  service: "bg-orange-500",
+                  service: "bg-violet-500",
                 };
                 return (
                   <div key={cat.category}>
@@ -133,7 +133,7 @@ export default async function AdminDashboard() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-white font-semibold text-lg">Recent Products</h2>
-            <a href="/admin/products" className="text-orange-400 hover:text-orange-300 text-sm transition">View all →</a>
+            <a href="/admin/products" className="text-violet-400 hover:text-violet-300 text-sm transition">View all →</a>
           </div>
           <div className="space-y-3">
             {stats.recentProducts.length === 0 ? (
@@ -145,7 +145,7 @@ export default async function AdminDashboard() {
                     <div className="text-white text-sm font-medium">{product.name}</div>
                     <div className="text-gray-500 text-xs capitalize">{product.category}</div>
                   </div>
-                  <div className="text-orange-400 font-semibold text-sm">₵{product.price.toFixed(2)}</div>
+                  <div className="text-violet-400 font-semibold text-sm">₵{product.price.toFixed(2)}</div>
                 </div>
               ))
             )}
@@ -158,7 +158,7 @@ export default async function AdminDashboard() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-white font-semibold text-lg">Recent Activity</h2>
           {session?.user.role === "admin" && (
-            <a href="/admin/logs" className="text-orange-400 hover:text-orange-300 text-sm transition">View all →</a>
+            <a href="/admin/logs" className="text-violet-400 hover:text-violet-300 text-sm transition">View all →</a>
           )}
         </div>
         <div className="space-y-2">
@@ -171,13 +171,13 @@ export default async function AdminDashboard() {
                 LOGIN_FAILED: "text-red-400",
                 LOGIN_BLOCKED: "text-red-500",
                 LOGOUT: "text-gray-400",
-                CREATE: "text-orange-400",
+                CREATE: "text-violet-400",
                 UPDATE: "text-yellow-400",
                 DELETE: "text-red-400",
               };
               return (
                 <div key={log.id} className="flex items-center gap-3 py-2 border-b border-gray-800 last:border-0">
-                  <div className="w-2 h-2 rounded-full bg-orange-500 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-violet-500 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <span className={`text-sm font-medium ${actionColors[log.action] || "text-gray-300"}`}>
                       {log.action}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ChatWidget from "@/components/ChatWidget";
 
@@ -227,31 +228,35 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3" onClick={() => setActiveTab("home")}>
-              <div className="w-9 h-9 bg-orange-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">RC</span>
-              </div>
+              <Image
+                src="/logo-icon.svg"
+                alt="RightClick Computer Digitals"
+                width={40}
+                height={40}
+                className="w-10 h-10"
+              />
               <div>
                 <div className="text-white font-bold text-sm leading-tight">RIGHTCLICK</div>
-                <div className="text-orange-400 text-xs tracking-widest">COMPUTER DIGITALS</div>
+                <div className="text-violet-400 text-xs tracking-widest">COMPUTER DIGITALS</div>
               </div>
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <button onClick={() => setActiveTab("home")} className={`text-sm font-medium transition ${activeTab === "home" ? "text-orange-400" : "text-gray-300 hover:text-white"}`}>
+              <button onClick={() => setActiveTab("home")} className={`text-sm font-medium transition ${activeTab === "home" ? "text-violet-400" : "text-gray-300 hover:text-white"}`}>
                 Home
               </button>
-              <button onClick={() => setActiveTab("products")} className={`text-sm font-medium transition ${activeTab === "products" ? "text-orange-400" : "text-gray-300 hover:text-white"}`}>
+              <button onClick={() => setActiveTab("products")} className={`text-sm font-medium transition ${activeTab === "products" ? "text-violet-400" : "text-gray-300 hover:text-white"}`}>
                 Products
               </button>
-              <button onClick={() => setActiveTab("services")} className={`text-sm font-medium transition ${activeTab === "services" ? "text-orange-400" : "text-gray-300 hover:text-white"}`}>
+              <button onClick={() => setActiveTab("services")} className={`text-sm font-medium transition ${activeTab === "services" ? "text-violet-400" : "text-gray-300 hover:text-white"}`}>
                 Services
               </button>
-              <button onClick={() => setActiveTab("application")} className={`text-sm font-medium transition ${activeTab === "application" ? "text-orange-400" : "text-gray-300 hover:text-white"}`}>
+              <button onClick={() => setActiveTab("application")} className={`text-sm font-medium transition ${activeTab === "application" ? "text-violet-400" : "text-gray-300 hover:text-white"}`}>
                 Application
               </button>
-              <button onClick={() => setActiveTab("cart")} className={`text-sm font-medium transition relative ${activeTab === "cart" ? "text-orange-400" : "text-gray-300 hover:text-white"}`}>
+              <button onClick={() => setActiveTab("cart")} className={`text-sm font-medium transition relative ${activeTab === "cart" ? "text-violet-400" : "text-gray-300 hover:text-white"}`}>
                 Cart
                 {cart.length > 0 && (
-                  <span className="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-3 bg-violet-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {cart.length}
                   </span>
                 )}
@@ -259,7 +264,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/login"
-              className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+              className="bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
             >
               Staff Login
             </Link>
@@ -270,28 +275,28 @@ export default function HomePage() {
       {/* Mobile Tab Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-50">
         <div className="flex justify-around py-2">
-          <button onClick={() => setActiveTab("home")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "home" ? "text-orange-400" : "text-gray-400"}`}>
+          <button onClick={() => setActiveTab("home")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "home" ? "text-violet-400" : "text-gray-400"}`}>
             <span>🏠</span>
             <span className="text-xs">Home</span>
           </button>
-          <button onClick={() => setActiveTab("products")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "products" ? "text-orange-400" : "text-gray-400"}`}>
+          <button onClick={() => setActiveTab("products")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "products" ? "text-violet-400" : "text-gray-400"}`}>
             <span>🛒</span>
             <span className="text-xs">Products</span>
           </button>
-          <button onClick={() => setActiveTab("services")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "services" ? "text-orange-400" : "text-gray-400"}`}>
+          <button onClick={() => setActiveTab("services")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "services" ? "text-violet-400" : "text-gray-400"}`}>
             <span>🔧</span>
             <span className="text-xs">Services</span>
           </button>
-          <button onClick={() => setActiveTab("cart")} className={`flex flex-col items-center py-2 px-3 relative ${activeTab === "cart" ? "text-orange-400" : "text-gray-400"}`}>
+          <button onClick={() => setActiveTab("cart")} className={`flex flex-col items-center py-2 px-3 relative ${activeTab === "cart" ? "text-violet-400" : "text-gray-400"}`}>
             <span>🛍️</span>
             <span className="text-xs">Cart</span>
             {cart.length > 0 && (
-              <span className="absolute top-0 right-2 bg-orange-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              <span className="absolute top-0 right-2 bg-violet-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {cart.length}
               </span>
             )}
           </button>
-          <button onClick={() => setActiveTab("application")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "application" ? "text-orange-400" : "text-gray-400"}`}>
+          <button onClick={() => setActiveTab("application")} className={`flex flex-col items-center py-2 px-3 ${activeTab === "application" ? "text-violet-400" : "text-gray-400"}`}>
             <span>📝</span>
             <span className="text-xs">Apply</span>
           </button>
@@ -302,18 +307,18 @@ export default function HomePage() {
       {activeTab === "home" && (
         <>
           {/* Hero Section */}
-          <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-orange-950/50 to-gray-900 py-24 px-4">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/20 via-transparent to-transparent" />
+          <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-violet-950/50 to-gray-900 py-24 px-4">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-900/20 via-transparent to-transparent" />
             <div className="max-w-7xl mx-auto relative">
               <div className="text-center max-w-3xl mx-auto">
-                <div className="inline-flex items-center gap-2 bg-orange-600/10 border border-orange-500/20 rounded-full px-4 py-1.5 mb-6">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
-                  <span className="text-orange-400 text-sm font-medium">Your Trusted Tech Partner</span>
+                <div className="inline-flex items-center gap-2 bg-violet-600/10 border border-violet-500/20 rounded-full px-4 py-1.5 mb-6">
+                  <div className="w-2 h-2 bg-violet-500 rounded-full animate-pulse" />
+                  <span className="text-violet-400 text-sm font-medium">Your Trusted Tech Partner</span>
                 </div>
                 <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
                   <span className="text-white">RIGHTCLICK</span>
                   <br />
-                  <span className="text-orange-400">COMPUTER DIGITALS</span>
+                  <span className="text-violet-400">COMPUTER DIGITALS</span>
                 </h1>
                 <p className="text-2xl text-gray-300 font-light mb-4 italic">&ldquo;We give you options.&rdquo;</p>
                 <p className="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">
@@ -323,7 +328,7 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <button
                     onClick={() => setActiveTab("products")}
-                    className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-8 py-4 rounded-xl transition text-lg"
+                    className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-4 rounded-xl transition text-lg"
                   >
                     Browse Products
                   </button>
@@ -339,7 +344,7 @@ export default function HomePage() {
           </section>
 
           {/* Stats Bar */}
-          <section className="bg-orange-600 py-8">
+          <section className="bg-violet-600 py-8">
             <div className="max-w-7xl mx-auto px-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 {[
@@ -350,7 +355,7 @@ export default function HomePage() {
                 ].map((stat) => (
                   <div key={stat.label}>
                     <div className="text-3xl font-bold text-white">{stat.value}</div>
-                    <div className="text-orange-100 text-sm mt-1">{stat.label}</div>
+                    <div className="text-violet-100 text-sm mt-1">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -366,7 +371,7 @@ export default function HomePage() {
                     <h2 className="text-3xl font-bold text-white">Featured Products</h2>
                     <p className="text-gray-400 mt-2">Hand-picked selections for you</p>
                   </div>
-                  <button onClick={() => setActiveTab("products")} className="text-orange-400 hover:text-orange-300 transition text-sm font-medium">
+                  <button onClick={() => setActiveTab("products")} className="text-violet-400 hover:text-violet-300 transition text-sm font-medium">
                     View All →
                   </button>
                 </div>
@@ -404,7 +409,7 @@ export default function HomePage() {
                     desc: "Not sure what to buy? Our experts will help you find the perfect solution for your needs.",
                   },
                 ].map((service) => (
-                  <div key={service.title} className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+                  <div key={service.title} className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                     <div className="text-4xl mb-4">{service.icon}</div>
                     <h3 className="text-white font-bold text-lg mb-2">{service.title}</h3>
                     <p className="text-gray-400 text-sm leading-relaxed">{service.desc}</p>
@@ -439,13 +444,13 @@ export default function HomePage() {
           </section>
 
           {/* CTA Section */}
-          <section className="py-20 px-4 bg-gradient-to-r from-orange-900/50 to-orange-800/30 border-y border-orange-800/30">
+          <section className="py-20 px-4 bg-gradient-to-r from-violet-900/50 to-violet-800/30 border-y border-violet-800/30">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-white mb-4">Ready to Find Your Perfect Tech?</h2>
               <p className="text-gray-300 mb-8">Browse our full catalog of computers, accessories, and services.</p>
               <button
                 onClick={() => setActiveTab("products")}
-                className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-10 py-4 rounded-xl transition text-lg inline-block"
+                className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-10 py-4 rounded-xl transition text-lg inline-block"
               >
                 Shop Now
               </button>
@@ -474,32 +479,32 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-white mb-8">Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="text-4xl mb-4">🖥️</div>
                 <h3 className="text-white font-bold text-lg mb-2">Computer Sales</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">Wide range of laptops, desktops, and accessories from top brands at competitive prices.</p>
               </div>
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="text-4xl mb-4">🔧</div>
                 <h3 className="text-white font-bold text-lg mb-2">Repair Services</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">Expert repair services for all computer brands. Fast turnaround, quality guaranteed.</p>
               </div>
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="text-4xl mb-4">💡</div>
                 <h3 className="text-white font-bold text-lg mb-2">Tech Consultation</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">Not sure what to buy? Our experts will help you find the perfect solution for your needs.</p>
               </div>
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="text-4xl mb-4">🛠️</div>
                 <h3 className="text-white font-bold text-lg mb-2">Installation Services</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">Professional installation of software, hardware, and operating systems.</p>
               </div>
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="text-4xl mb-4">🧹</div>
                 <h3 className="text-white font-bold text-lg mb-2">Maintenance</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">Regular maintenance to keep your systems running smoothly and efficiently.</p>
               </div>
-              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-orange-500/50 transition">
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="text-4xl mb-4">🔒</div>
                 <h3 className="text-white font-bold text-lg mb-2">Security Solutions</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">Virus removal, malware protection, and security system setup.</p>
@@ -521,7 +526,7 @@ export default function HomePage() {
                 <p className="text-gray-400 text-lg mb-6">Your cart is empty</p>
                 <button
                   onClick={() => setActiveTab("products")}
-                  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+                  className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-3 rounded-xl transition"
                 >
                   Browse Products
                 </button>
@@ -536,7 +541,7 @@ export default function HomePage() {
                       )}
                       <div className="flex-1">
                         <h3 className="text-white font-semibold">{item.product.name}</h3>
-                        <p className="text-orange-400 font-bold">₵{item.product.price.toFixed(2)}</p>
+                        <p className="text-violet-400 font-bold">₵{item.product.price.toFixed(2)}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <button
@@ -578,7 +583,7 @@ export default function HomePage() {
                   </div>
                   <div className="border-t border-gray-700 pt-4 flex justify-between">
                     <span className="text-white font-bold text-xl">Total</span>
-                    <span className="text-orange-400 font-bold text-xl">₵{getCartTotal().toFixed(2)}</span>
+                    <span className="text-violet-400 font-bold text-xl">₵{getCartTotal().toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -586,7 +591,7 @@ export default function HomePage() {
                 {!showCheckout ? (
                   <button
                     onClick={handleCheckout}
-                    className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-4 rounded-xl transition text-lg"
+                    className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-4 rounded-xl transition text-lg"
                   >
                     Proceed to Checkout
                   </button>
@@ -619,7 +624,7 @@ export default function HomePage() {
                                   type="text"
                                   value={customerForm.fullName}
                                   onChange={(e) => setCustomerForm({ ...customerForm, fullName: e.target.value })}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                                   placeholder="Enter your full name"
                                   required
                                 />
@@ -630,7 +635,7 @@ export default function HomePage() {
                                   type="tel"
                                   value={customerForm.phoneNumber}
                                   onChange={(e) => setCustomerForm({ ...customerForm, phoneNumber: e.target.value })}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                                   placeholder="Enter your phone number"
                                   required
                                 />
@@ -641,7 +646,7 @@ export default function HomePage() {
                                   type="email"
                                   value={customerForm.email}
                                   onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                                   placeholder="Enter your email"
                                 />
                               </div>
@@ -650,7 +655,7 @@ export default function HomePage() {
                                 <textarea
                                   value={customerForm.shippingAddress}
                                   onChange={(e) => setCustomerForm({ ...customerForm, shippingAddress: e.target.value })}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                                   placeholder="Enter your address for delivery"
                                   rows={2}
                                 />
@@ -674,7 +679,7 @@ export default function HomePage() {
                           </div>
                           <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
                             <div className="text-gray-400 text-sm mb-1">Tracking Number</div>
-                            <div className="text-2xl font-bold text-orange-400">{orderDetails?.trackingNumber}</div>
+                            <div className="text-2xl font-bold text-violet-400">{orderDetails?.trackingNumber}</div>
                           </div>
                           <p className="text-gray-300 mb-2">Please make your payment to:</p>
                           <div className="text-3xl font-bold text-white mb-4">0548184293</div>
@@ -689,7 +694,7 @@ export default function HomePage() {
                               setCustomerForm({ fullName: "", phoneNumber: "", email: "", shippingAddress: "" });
                               setActiveTab("home");
                             }}
-                            className="mt-6 bg-orange-600 hover:bg-orange-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+                            className="mt-6 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-3 rounded-xl transition"
                           >
                             Done
                           </button>
@@ -724,7 +729,7 @@ export default function HomePage() {
                 <p className="text-gray-300 mb-6">Thank you for your interest in joining our team. We will review your application and contact you soon.</p>
                 <button
                   onClick={() => setAppSuccess(false)}
-                  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+                  className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-3 rounded-xl transition"
                 >
                   Submit Another Application
                 </button>
@@ -744,7 +749,7 @@ export default function HomePage() {
                     required
                     value={appForm.fullName}
                     onChange={(e) => setAppForm({ ...appForm, fullName: e.target.value })}
-                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -756,7 +761,7 @@ export default function HomePage() {
                     required
                     value={appForm.phoneNumber}
                     onChange={(e) => setAppForm({ ...appForm, phoneNumber: e.target.value })}
-                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -768,7 +773,7 @@ export default function HomePage() {
                     required
                     value={appForm.email}
                     onChange={(e) => setAppForm({ ...appForm, email: e.target.value })}
-                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
                     placeholder="Enter your email address"
                   />
                 </div>
@@ -779,14 +784,14 @@ export default function HomePage() {
                     type="file"
                     accept=".pdf,.doc,.docx"
                     onChange={(e) => setAppForm({ ...appForm, cvFile: e.target.files?.[0] || null })}
-                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-600 file:text-white file:cursor-pointer"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-violet-600 file:text-white file:cursor-pointer"
                   />
                 </div>
                 
                 <button
                   type="submit"
                   disabled={appSubmitting}
-                  className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 text-white font-semibold py-4 rounded-xl transition text-lg"
+                  className="w-full bg-violet-600 hover:bg-violet-700 disabled:bg-gray-600 text-white font-semibold py-4 rounded-xl transition text-lg"
                 >
                   {appSubmitting ? "Submitting..." : "Submit Application"}
                 </button>
@@ -803,12 +808,16 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 bg-orange-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">RC</span>
-                  </div>
+                  <Image
+                    src="/logo-icon.svg"
+                    alt="RightClick Computer Digitals"
+                    width={36}
+                    height={36}
+                    className="w-9 h-9"
+                  />
                   <div>
                     <div className="text-white font-bold text-sm">RIGHTCLICK</div>
-                    <div className="text-orange-400 text-xs tracking-widest">COMPUTER DIGITALS</div>
+                    <div className="text-violet-400 text-xs tracking-widest">COMPUTER DIGITALS</div>
                   </div>
                 </div>
                 <p className="text-gray-400 text-sm italic">&ldquo;We give you options.&rdquo;</p>
@@ -851,15 +860,15 @@ export default function HomePage() {
 
 function ProductCard({ product, onAddToCart }: { product: Product; onAddToCart: (product: Product) => void }) {
   const categoryColors: Record<string, string> = {
-    laptop: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    laptop: "bg-violet-500/10 text-violet-400 border-violet-500/20",
     desktop: "bg-purple-500/10 text-purple-400 border-purple-500/20",
     accessory: "bg-green-500/10 text-green-400 border-green-500/20",
     part: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    service: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    service: "bg-violet-500/10 text-violet-400 border-violet-500/20",
   };
 
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/5 transition group">
+    <div className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/5 transition group">
       {product.imageUrl && (
         <div className="h-48 overflow-hidden bg-gray-900">
           <img
@@ -887,10 +896,10 @@ function ProductCard({ product, onAddToCart }: { product: Product; onAddToCart: 
           </div>
         )}
         <div className="flex items-center justify-between mt-4">
-          <span className="text-2xl font-bold text-orange-400">₵{product.price.toFixed(2)}</span>
+          <span className="text-2xl font-bold text-violet-400">₵{product.price.toFixed(2)}</span>
           <button
             onClick={() => onAddToCart(product)}
-            className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+            className="bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
           >
             Add to Cart
           </button>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,18 +40,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-orange-950 to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-violet-950 to-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-xl">RC</span>
-              </div>
+              <Image
+                src="/logo-icon.svg"
+                alt="RightClick Computer Digitals"
+                width={48}
+                height={48}
+                className="w-12 h-12"
+              />
               <div className="text-left">
                 <div className="text-white font-bold text-lg leading-tight">RIGHTCLICK</div>
-                <div className="text-orange-400 text-xs font-medium tracking-widest">COMPUTER DIGITALS</div>
+                <div className="text-violet-400 text-xs font-medium tracking-widest">COMPUTER DIGITALS</div>
               </div>
             </div>
           </Link>
@@ -79,7 +84,7 @@ export default function LoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 autoComplete="username"
-                className="w-full bg-gray-700/50 border border-gray-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-500"
+                className="w-full bg-gray-700/50 border border-gray-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition placeholder-gray-500"
                 placeholder="Enter your username"
               />
             </div>
@@ -93,7 +98,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="w-full bg-gray-700/50 border border-gray-600 text-white rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-500"
+                  className="w-full bg-gray-700/50 border border-gray-600 text-white rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition placeholder-gray-500"
                   placeholder="Enter your password"
                 />
                 <button
@@ -121,7 +126,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-orange-800 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition flex items-center justify-center gap-2"
+              className="w-full bg-violet-600 hover:bg-violet-700 disabled:bg-violet-800 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>

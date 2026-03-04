@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 type User = {
@@ -43,12 +44,16 @@ export default function AdminSidebar({ user }: { user: User }) {
       {/* Logo */}
       <div className="p-5 border-b border-gray-800">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-orange-600 rounded-lg flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-bold text-sm">RC</span>
-          </div>
+          <Image
+            src="/logo-icon.svg"
+            alt="RightClick Computer Digitals"
+            width={36}
+            height={36}
+            className="w-9 h-9 flex-shrink-0"
+          />
           <div>
             <div className="text-white font-bold text-xs leading-tight">RIGHTCLICK</div>
-            <div className="text-orange-400 text-xs tracking-widest">COMPUTER DIGITALS</div>
+            <div className="text-violet-400 text-xs tracking-widest">COMPUTER DIGITALS</div>
           </div>
         </Link>
         <div className="mt-3 text-xs text-gray-500 font-medium uppercase tracking-wider">Admin Panel</div>
@@ -65,7 +70,7 @@ export default function AdminSidebar({ user }: { user: User }) {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition ${
                 active
-                  ? "bg-orange-600 text-white font-medium"
+                  ? "bg-violet-600 text-white font-medium"
                   : "text-gray-400 hover:text-white hover:bg-gray-800"
               }`}
             >
@@ -79,13 +84,13 @@ export default function AdminSidebar({ user }: { user: User }) {
       {/* User Info & Logout */}
       <div className="p-4 border-t border-gray-800">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-9 h-9 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-violet-800 rounded-full flex items-center justify-center flex-shrink-0">
             <span className="text-white font-bold text-sm">{user.username[0].toUpperCase()}</span>
           </div>
           <div className="min-w-0">
             <div className="text-white text-sm font-medium truncate">{user.username}</div>
             <div className="flex items-center gap-1.5">
-              <span className={`w-1.5 h-1.5 rounded-full ${user.role === "admin" ? "bg-yellow-400" : "bg-orange-400"}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${user.role === "admin" ? "bg-yellow-400" : "bg-violet-400"}`} />
               <span className="text-gray-400 text-xs capitalize">{user.role}</span>
             </div>
           </div>

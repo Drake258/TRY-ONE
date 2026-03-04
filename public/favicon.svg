@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#7C3AED"/>
+  
+  <!-- Monitor Screen -->
+  <rect x="6" y="7" width="20" height="14" rx="2" fill="#A78BFA"/>
+  <rect x="8" y="9" width="16" height="10" rx="1" fill="#EDE9FE"/>
+  
+  <!-- Stand -->
+  <rect x="12" y="21" width="8" height="3" fill="#6D28D9"/>
+  <rect x="10" y="23" width="12" height="2" rx="1" fill="#5B21B6"/>
+  
+  <!-- Click Cursor -->
+  <path d="M20 14L24 10L25 11L21 15L23 17L19 21L15 17L17 15L13 11L14 10L18 14L20 14Z" fill="#FBBF24"/>
+</svg>
