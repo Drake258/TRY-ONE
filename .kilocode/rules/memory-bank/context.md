@@ -51,6 +51,11 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Add admin dashboard for managing AI chat (chat logs, response templates, settings)
 - [x] Seed 25+ AI response templates for FAQs, pricing, shipping, payment, support
 - [x] Integrate ChatWidget on homepage (all tabs: home, products, services, cart)
+- [x] Add orders table to database schema with order/tracking numbers
+- [x] Create orders API routes for order creation and lookup
+- [x] Add customer details form (name, phone, email, address) at checkout
+- [x] Show order and tracking numbers after order confirmation
+- [x] Update AI chat to look up orders by order/tracking number
 
 ## Current Structure
 
@@ -85,6 +90,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `chat_messages` | Chat message history |
 | `ai_responses` | AI response templates |
 | `ai_settings` | AI assistant configuration |
+| `orders` | Customer orders with tracking numbers |
 
 ## Admin Credentials
 
@@ -112,6 +118,8 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `/api/admin/chat/[id]` | GET/POST | Get/send chat messages |
 | `/api/admin/ai-responses` | GET/POST/PUT/DELETE | Manage AI responses |
 | `/api/admin/ai-settings` | GET/POST | Manage AI settings |
+| `/api/orders` | POST/GET | Create/lookup orders |
+| `/api/orders/[id]` | GET/PATCH | Get/update order by order number |
 
 ## Session History
 
@@ -121,3 +129,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-02-27 | Full RIGHTCLICK marketing software built |
 | 2026-03-04 | Color scheme change to orange/white, Cart & Application tabs, More products for preview |
 | 2026-03-04 | AI Assistant with live chat widget, 25+ response templates, admin dashboard for chat management |
+| 2026-03-04 | Add order tracking with order numbers and tracking numbers, customer checkout form, AI order lookup |
