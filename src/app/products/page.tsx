@@ -60,7 +60,7 @@ export default async function ProductsPage() {
       </nav>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-gray-900 to-blue-950/30 border-b border-gray-800 py-12 px-4">
+      <div className="bg-gradient-to-r from-gray-900 to-orange-950/30 border-b border-gray-800 py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl font-bold text-white mb-2">Our Products</h1>
           <p className="text-gray-400">Browse our complete catalog — <span className="text-orange-400 italic">&ldquo;We give you options.&rdquo;</span></p>
@@ -90,7 +90,7 @@ export default async function ProductsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {allProducts.map((product) => (
-              <div key={product.id} className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-orange-500/50 hover:shadow-lg hover:shadow-blue-500/5 transition group">
+              <div key={product.id} className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/5 transition group">
                 {product.imageUrl && (
                   <div className="h-44 overflow-hidden bg-gray-900">
                     <img

@@ -82,7 +82,7 @@ export default async function AdminUsersPage() {
                 <tr key={user.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-gradient-to-br from-orange-600 to-blue-800 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-9 h-9 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-white font-bold text-sm">{user.username[0].toUpperCase()}</span>
                       </div>
                       <div>

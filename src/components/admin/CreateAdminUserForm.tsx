@@ -54,7 +54,7 @@ export default function CreateAdminUserForm({ createdBy }: { createdBy: number }
     }
   }
 
-  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-600 text-sm";
+  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-600 text-sm";
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">

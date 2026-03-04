@@ -299,7 +299,7 @@ export default function HomePage() {
                 ].map((stat) => (
                   <div key={stat.label}>
                     <div className="text-3xl font-bold text-white">{stat.value}</div>
-                    <div className="text-blue-100 text-sm mt-1">{stat.label}</div>
+                    <div className="text-orange-100 text-sm mt-1">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -388,7 +388,7 @@ export default function HomePage() {
           </section>
 
           {/* CTA Section */}
-          <section className="py-20 px-4 bg-gradient-to-r from-orange-900/50 to-orange-800/30 border-y border-blue-800/30">
+          <section className="py-20 px-4 bg-gradient-to-r from-orange-900/50 to-orange-800/30 border-y border-orange-800/30">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-white mb-4">Ready to Find Your Perfect Tech?</h2>
               <p className="text-gray-300 mb-8">Browse our full catalog of computers, accessories, and services.</p>
@@ -743,7 +743,7 @@ function ProductCard({ product, onAddToCart }: { product: Product; onAddToCart: 
   };
 
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-orange-500/50 hover:shadow-lg hover:shadow-blue-500/5 transition group">
+    <div className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/5 transition group">
       {product.imageUrl && (
         <div className="h-48 overflow-hidden bg-gray-900">
           <img

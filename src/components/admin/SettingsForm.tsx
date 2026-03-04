@@ -45,7 +45,7 @@ export default function SettingsForm({ settings }: { settings: Settings }) {
     }
   }
 
-  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-600 text-sm";
+  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-600 text-sm";
   const labelClass = "block text-gray-300 text-sm font-medium mb-1.5";
 
   return (

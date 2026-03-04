@@ -79,7 +79,7 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
     }
   }
 
-  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-600 text-sm";
+  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-600 text-sm";
   const labelClass = "block text-gray-300 text-sm font-medium mb-1.5";
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -265,7 +265,7 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
               name="inStock"
               checked={form.inStock}
               onChange={handleChange}
-              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-orange-600 focus:ring-orange-500"
             />
             <div>
               <div className="text-white text-sm font-medium">In Stock</div>
@@ -278,7 +278,7 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
               name="featured"
               checked={form.featured}
               onChange={handleChange}
-              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-orange-600 focus:ring-orange-500"
             />
             <div>
               <div className="text-white text-sm font-medium">Featured Product</div>
