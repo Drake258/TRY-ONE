@@ -35,6 +35,14 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Add Services tab to admin sidebar with full CRUD operations
 - [x] Ensure Blessing user always has admin role in database initialization
 - [x] Fix Boss admin user: add Boss user creation to src/db/init.ts (was only in seed.ts)
+- [x] Color scheme: Change from blue to orange and white throughout the application
+- [x] Add Cart tab with cart functionality to main homepage
+- [x] Add Payment Instruction after order confirmation in Cart tab
+- [x] Add Office Contact Line (0503819000) to homepage
+- [x] Add Application tab with form to main homepage
+- [x] Update database schema for applications and cart
+- [x] Create API routes for cart and applications
+- [x] Add more products with prices for customer preview (24 total products)
 
 ## Current Structure
 
@@ -92,3 +100,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-02-27 | Full RIGHTCLICK marketing software built |
+| 2026-03-04 | Color scheme change to orange/white, Cart & Application tabs, More products for preview |
