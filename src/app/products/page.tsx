@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ChatWidget from "@/components/ChatWidget";
 import { db } from "@/db";
 import { products } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -138,6 +139,9 @@ export default async function ProductsPage() {
           &copy; {new Date().getFullYear()} RIGHTCLICK COMPUTER DIGITALS. All rights reserved. &mdash; <span className="italic">&ldquo;We give you options.&rdquo;</span>
         </div>
       </footer>
+
+      {/* AI Chat Widget */}
+      <ChatWidget />
     </div>
   );
 }
