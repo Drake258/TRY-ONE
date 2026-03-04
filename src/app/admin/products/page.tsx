@@ -63,6 +63,7 @@ export default async function AdminProductsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {product.imageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img src={product.imageUrl} alt={product.name} className="w-10 h-10 rounded-lg object-cover bg-gray-800" />
                         ) : (
                           <div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-500 text-lg">🖥️</div>

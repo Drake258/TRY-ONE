@@ -94,6 +94,7 @@ export default async function ProductsPage() {
               <div key={product.id} className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/5 transition group">
                 {product.imageUrl && (
                   <div className="h-44 overflow-hidden bg-gray-900">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={product.imageUrl}
                       alt={product.name}

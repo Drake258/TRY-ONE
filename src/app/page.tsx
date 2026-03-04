@@ -597,6 +597,7 @@ export default function HomePage() {
                   {cart.map((item) => (
                     <div key={item.product.id} className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 flex items-center gap-4">
                       {item.product.imageUrl && (
+                        /* eslint-disable-next-line @next/next/no-img-element */
                         <img src={item.product.imageUrl} alt={item.product.name} className="w-20 h-20 object-cover rounded-lg" />
                       )}
                       <div className="flex-1">
@@ -1086,6 +1087,7 @@ function ProductCard({ product, onAddToCart }: { product: Product; onAddToCart: 
     <div className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/5 transition group">
       {product.imageUrl && (
         <div className="h-48 overflow-hidden bg-gray-900">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.imageUrl}
             alt={product.name}

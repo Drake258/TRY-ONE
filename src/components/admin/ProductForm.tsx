@@ -171,6 +171,7 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
               {/* Current Image Preview */}
               {form.imageUrl && (
                 <div className="relative inline-block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img 
                     src={form.imageUrl} 
                     alt="Product preview" 
