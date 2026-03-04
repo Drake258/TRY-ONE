@@ -67,6 +67,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Order status workflow: pending → confirmed → processing → shipped → delivered
 - [x] Manual payment confirmation for MoMo and refund processing
 - [x] Invoice generation: Text-based invoice download
+- [x] Fix lint warnings: add eslint-disable comments for img elements and useEffect dependencies
 
 ## Current Structure
 
