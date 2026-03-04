@@ -76,7 +76,7 @@ export default async function ReportsPage() {
             { label: "Featured", value: data.products.featured, color: "yellow" },
           ].map((stat) => {
             const colors: Record<string, string> = {
-              blue: "border-blue-500/20 bg-blue-600/10 text-blue-400",
+              blue: "border-orange-500/20 bg-orange-600/10 text-orange-400",
               green: "border-green-500/20 bg-green-600/10 text-green-400",
               red: "border-red-500/20 bg-red-600/10 text-red-400",
               yellow: "border-yellow-500/20 bg-yellow-600/10 text-yellow-400",
@@ -99,7 +99,7 @@ export default async function ReportsPage() {
                   <span className="text-gray-300 text-sm capitalize">{cat.category}</span>
                   <div className="flex items-center gap-4">
                     <span className="text-gray-400 text-sm">{cat.count} items</span>
-                    <span className="text-blue-400 text-sm font-medium">₵{Number(cat.avgPrice).toFixed(2)} avg</span>
+                    <span className="text-orange-400 text-sm font-medium">₵{Number(cat.avgPrice).toFixed(2)} avg</span>
                   </div>
                 </div>
               ))}
@@ -108,7 +108,7 @@ export default async function ReportsPage() {
 
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
             <h3 className="text-white font-medium mb-4">Inventory Value</h3>
-            <div className="text-4xl font-bold text-blue-400 mb-2">₵{data.products.totalValue.toFixed(2)}</div>
+            <div className="text-4xl font-bold text-orange-400 mb-2">₵{data.products.totalValue.toFixed(2)}</div>
             <div className="text-gray-400 text-sm">Total catalog value</div>
             <div className="mt-4 pt-4 border-t border-gray-800">
               <div className="flex justify-between text-sm">

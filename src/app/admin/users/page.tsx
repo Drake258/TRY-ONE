@@ -32,7 +32,7 @@ export default async function AdminUsersPage() {
         </div>
         <Link
           href="/admin/users/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
+          className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
         >
           <span>+</span> Create User
         </Link>
@@ -46,12 +46,12 @@ export default async function AdminUsersPage() {
           { label: "Active Users", value: allUsers.filter(u => u.status === "active").length, color: "green" },
         ].map((card) => {
           const colors: Record<string, string> = {
-            blue: "border-blue-500/20 bg-blue-600/10",
+            blue: "border-orange-500/20 bg-orange-600/10",
             yellow: "border-yellow-500/20 bg-yellow-600/10",
             green: "border-green-500/20 bg-green-600/10",
           };
           const textColors: Record<string, string> = {
-            blue: "text-blue-400",
+            blue: "text-orange-400",
             yellow: "text-yellow-400",
             green: "text-green-400",
           };
@@ -82,7 +82,7 @@ export default async function AdminUsersPage() {
                 <tr key={user.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-9 h-9 bg-gradient-to-br from-orange-600 to-blue-800 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-white font-bold text-sm">{user.username[0].toUpperCase()}</span>
                       </div>
                       <div>
@@ -95,7 +95,7 @@ export default async function AdminUsersPage() {
                     <span className={`text-xs px-2 py-1 rounded-full capitalize ${
                       user.role === "admin"
                         ? "bg-yellow-500/10 text-yellow-400"
-                        : "bg-blue-500/10 text-blue-400"
+                        : "bg-orange-500/10 text-orange-400"
                     }`}>
                       {user.role === "admin" ? "🛡️ " : "👤 "}{user.role}
                     </span>

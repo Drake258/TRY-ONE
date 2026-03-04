@@ -72,7 +72,7 @@ export default function ApplicationsPage() {
 
   const statusColors: Record<string, string> = {
     pending: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    reviewed: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    reviewed: "bg-orange-500/10 text-orange-400 border-orange-500/20",
     accepted: "bg-green-500/10 text-green-400 border-green-500/20",
     rejected: "bg-red-500/10 text-red-400 border-red-500/20",
   };
@@ -107,7 +107,7 @@ export default function ApplicationsPage() {
               onClick={() => setFilter(status)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 filter === status
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-600 text-white"
                   : "bg-gray-800 text-gray-400 hover:bg-gray-700"
               }`}
             >
@@ -131,7 +131,7 @@ export default function ApplicationsPage() {
             {applications.map((app) => (
               <div
                 key={app.id}
-                className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition cursor-pointer"
+                className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-orange-500/50 transition cursor-pointer"
                 onClick={() => setSelectedApp(app)}
               >
                 <div className="flex items-start justify-between">
@@ -149,7 +149,7 @@ export default function ApplicationsPage() {
                 <div className="mt-3 text-gray-500 text-sm">
                   Applied on {formatDate(app.createdAt)}
                   {app.cvPath && (
-                    <span className="ml-3 text-blue-400">📎 CV attached</span>
+                    <span className="ml-3 text-orange-400">📎 CV attached</span>
                   )}
                 </div>
               </div>
@@ -201,7 +201,7 @@ export default function ApplicationsPage() {
                       href={selectedApp.cvPath}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 flex items-center gap-2 mt-1"
+                      className="text-orange-400 hover:text-orange-300 flex items-center gap-2 mt-1"
                     >
                       📎 View CV
                     </a>
@@ -231,7 +231,7 @@ export default function ApplicationsPage() {
                     onClick={() => updateStatus(selectedApp.id, "reviewed")}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                       selectedApp.status === "reviewed"
-                        ? "bg-blue-600 text-white"
+                        ? "bg-orange-600 text-white"
                         : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                     }`}
                   >
