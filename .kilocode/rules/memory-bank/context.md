@@ -61,6 +61,12 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Create favicon.svg for browser tab icon
 - [x] Change color scheme from orange to purple (violet) theme throughout
 - [x] Update all admin pages with new purple branding
+- [x] Enhanced checkout: shipping/billing forms, order summary, promo codes (WELCOME10, SAVE50, NEWUSER)
+- [x] Payment methods: Mobile Money & Card options with payment reference generation
+- [x] Admin Orders page: Full orders management with filtering by status/payment/date
+- [x] Order status workflow: pending → confirmed → processing → shipped → delivered
+- [x] Manual payment confirmation for MoMo and refund processing
+- [x] Invoice generation: Text-based invoice download
 
 ## Current Structure
 
@@ -136,3 +142,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-03-04 | AI Assistant with live chat widget, 25+ response templates, admin dashboard for chat management |
 | 2026-03-04 | Add order tracking with order numbers and tracking numbers, customer checkout form, AI order lookup
 | 2026-03-04 | Add official RightClick Computer Digitals logo (SVG), favicon, change color scheme to purple/violet theme throughout application |
+| 2026-03-04 | Enhanced checkout: promo codes (WELCOME10, SAVE50, NEWUSER), payment methods, admin orders management, invoice generation |
