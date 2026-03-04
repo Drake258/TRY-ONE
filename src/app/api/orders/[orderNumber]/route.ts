@@ -76,7 +76,26 @@ export async function PATCH(
       .set(updateData)
       .where(eq(orders.orderNumber, orderNumber));
 
-    return NextResponse.json({ success: true });
+    // Fetch the updated order
+    const updatedOrder = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.orderNumber, orderNumber));
+
+    if (updatedOrder.length === 0) {
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ 
+      success: true,
+      order: {
+        ...updatedOrder[0],
+        items: JSON.parse(updatedOrder[0].items as string)
+      }
+    });
   } catch (error) {
     console.error("Error updating order:", error);
     return NextResponse.json(

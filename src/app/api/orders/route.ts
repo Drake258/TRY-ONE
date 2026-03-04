@@ -19,7 +19,22 @@ function generateTrackingNumber(): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { customerName, customerPhone, customerEmail, shippingAddress, items, totalAmount, paymentMethod, notes } = body;
+    const { 
+      customerName, 
+      customerPhone, 
+      customerEmail, 
+      shippingAddress,
+      billingAddress,
+      city,
+      region,
+      items, 
+      totalAmount, 
+      paymentMethod, 
+      notes,
+      promoCode,
+      discount,
+      paymentReference
+    } = body;
 
     if (!customerName || !customerPhone || !items || !totalAmount) {
       return NextResponse.json(
@@ -40,9 +55,15 @@ export async function POST(request: NextRequest) {
       customerPhone,
       customerEmail: customerEmail || null,
       shippingAddress: shippingAddress || null,
+      billingAddress: billingAddress || null,
+      city: city || null,
+      region: region || null,
       items: JSON.stringify(items),
       totalAmount,
+      discount: discount || null,
+      promoCode: promoCode || null,
       paymentMethod: paymentMethod || null,
+      paymentReference: paymentReference || null,
       status: "confirmed",
       paymentStatus: "pending",
       notes: notes || null,

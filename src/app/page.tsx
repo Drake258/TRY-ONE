@@ -43,7 +43,21 @@ export default function HomePage() {
     phoneNumber: "",
     email: "",
     shippingAddress: "",
+    billingAddress: "",
+    city: "",
+    region: "",
   });
+  
+  // Promo code state
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<{code: string; discount: number; discountType: 'percent' | 'fixed'} | null>(null);
+  const [promoError, setPromoError] = useState("");
+  const [promoLoading, setPromoLoading] = useState(false);
+  
+  // Payment method state
+  const [paymentMethod, setPaymentMethod] = useState<"momo" | "card" | null>(null);
+  const [paymentReference, setPaymentReference] = useState("");
+  const [processingPayment, setProcessingPayment] = useState(false);
   
   // Application form state
   const [appForm, setAppForm] = useState({
@@ -115,7 +129,44 @@ export default function HomePage() {
   };
 
   const getCartTotal = () => {
-    return cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    let total = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    if (appliedPromo) {
+      if (appliedPromo.discountType === 'percent') {
+        total = total - (total * appliedPromo.discount / 100);
+      } else {
+        total = Math.max(0, total - appliedPromo.discount);
+      }
+    }
+    return total;
+  };
+
+  const applyPromoCode = async () => {
+    if (!promoCode.trim()) return;
+    setPromoError("");
+    setPromoLoading(true);
+    
+    // Simulate promo code validation (in real app, this would call an API)
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Demo promo codes
+    const promoCodes: Record<string, {discount: number; discountType: 'percent' | 'fixed'}> = {
+      'WELCOME10': { discount: 10, discountType: 'percent' },
+      'SAVE50': { discount: 50, discountType: 'fixed' },
+      'NEWUSER': { discount: 15, discountType: 'percent' },
+    };
+    
+    const promo = promoCodes[promoCode.toUpperCase()];
+    if (promo) {
+      setAppliedPromo({ code: promoCode.toUpperCase(), ...promo });
+    } else {
+      setPromoError("Invalid promo code");
+    }
+    setPromoLoading(false);
+  };
+
+  const removePromoCode = () => {
+    setAppliedPromo(null);
+    setPromoCode("");
   };
 
   const handleCheckout = () => {
@@ -129,6 +180,10 @@ export default function HomePage() {
       alert("Please enter your name and phone number");
       return;
     }
+
+    // Generate payment reference
+    const ref = `RC${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    setPaymentReference(ref);
 
     try {
       const orderItems = cart.map(item => ({
@@ -146,8 +201,13 @@ export default function HomePage() {
           customerPhone: customerForm.phoneNumber,
           customerEmail: customerForm.email || undefined,
           shippingAddress: customerForm.shippingAddress || undefined,
+          billingAddress: customerForm.billingAddress || undefined,
           items: orderItems,
           totalAmount: getCartTotal(),
+          paymentMethod: paymentMethod || 'momo',
+          promoCode: appliedPromo?.code || null,
+          discount: appliedPromo ? (appliedPromo.discountType === 'percent' ? (getCartTotal() * appliedPromo.discount / 100) : appliedPromo.discount) : null,
+          paymentReference: ref,
         })
       });
 
@@ -574,8 +634,16 @@ export default function HomePage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between text-gray-400">
                       <span>Subtotal ({cart.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
-                      <span>₵{getCartTotal().toFixed(2)}</span>
+                      <span>₵{cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0).toFixed(2)}</span>
                     </div>
+                    {appliedPromo && (
+                      <div className="flex justify-between text-green-400">
+                        <span>Discount ({appliedPromo.code})</span>
+                        <span>-₵{appliedPromo.discountType === 'percent' 
+                          ? ((cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0) * appliedPromo.discount / 100)).toFixed(2)
+                          : appliedPromo.discount.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-gray-400">
                       <span>Shipping</span>
                       <span>Free</span>
@@ -585,6 +653,42 @@ export default function HomePage() {
                     <span className="text-white font-bold text-xl">Total</span>
                     <span className="text-violet-400 font-bold text-xl">₵{getCartTotal().toFixed(2)}</span>
                   </div>
+                  
+                  {/* Promo Code Section */}
+                  {!showCheckout && !appliedPromo && (
+                    <div className="mt-4 pt-4 border-t border-gray-700">
+                      <label className="text-gray-400 text-sm mb-2 block">Promo Code</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={promoCode}
+                          onChange={(e) => setPromoCode(e.target.value)}
+                          className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-violet-500 focus:outline-none"
+                          placeholder="Enter promo code"
+                        />
+                        <button
+                          onClick={applyPromoCode}
+                          disabled={promoLoading || !promoCode.trim()}
+                          className="bg-violet-600 hover:bg-violet-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition"
+                        >
+                          {promoLoading ? 'Applying...' : 'Apply'}
+                        </button>
+                      </div>
+                      {promoError && <p className="text-red-400 text-sm mt-2">{promoError}</p>}
+                      <p className="text-gray-500 text-xs mt-2">Try: WELCOME10, SAVE50, or NEWUSER</p>
+                    </div>
+                  )}
+                  {appliedPromo && (
+                    <div className="mt-4 pt-4 border-t border-gray-700 flex items-center justify-between bg-green-900/20 rounded-lg p-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-400">✓</span>
+                        <span className="text-green-400 font-medium">{appliedPromo.code} applied</span>
+                      </div>
+                      <button onClick={removePromoCode} className="text-gray-400 hover:text-white text-sm">
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Checkout Button */}
@@ -617,7 +721,7 @@ export default function HomePage() {
                           {/* Customer Details Form */}
                           <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4">
                             <h3 className="text-white font-bold text-lg mb-4">Your Details</h3>
-                            <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
                                 <label className="text-gray-400 text-sm mb-1 block">Full Name *</label>
                                 <input
@@ -651,50 +755,161 @@ export default function HomePage() {
                                 />
                               </div>
                               <div>
-                                <label className="text-gray-400 text-sm mb-1 block">Shipping Address (Optional)</label>
-                                <textarea
-                                  value={customerForm.shippingAddress}
-                                  onChange={(e) => setCustomerForm({ ...customerForm, shippingAddress: e.target.value })}
+                                <label className="text-gray-400 text-sm mb-1 block">City</label>
+                                <input
+                                  type="text"
+                                  value={customerForm.city}
+                                  onChange={(e) => setCustomerForm({ ...customerForm, city: e.target.value })}
                                   className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
-                                  placeholder="Enter your address for delivery"
-                                  rows={2}
+                                  placeholder="e.g., Accra"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-gray-400 text-sm mb-1 block">Region</label>
+                                <input
+                                  type="text"
+                                  value={customerForm.region}
+                                  onChange={(e) => setCustomerForm({ ...customerForm, region: e.target.value })}
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
+                                  placeholder="e.g., Greater Accra"
                                 />
                               </div>
                             </div>
                           </div>
                           
+                          {/* Shipping Address */}
+                          <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4">
+                            <h3 className="text-white font-bold text-lg mb-4">Shipping Address</h3>
+                            <div>
+                              <label className="text-gray-400 text-sm mb-1 block">Delivery Address (Optional)</label>
+                              <textarea
+                                value={customerForm.shippingAddress}
+                                onChange={(e) => setCustomerForm({ ...customerForm, shippingAddress: e.target.value })}
+                                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
+                                placeholder="Enter your address for delivery"
+                                rows={2}
+                              />
+                            </div>
+                          </div>
+                          
+                          {/* Billing Address */}
+                          <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4">
+                            <h3 className="text-white font-bold text-lg mb-4">Billing Address</h3>
+                            <div>
+                              <label className="text-gray-400 text-sm mb-1 block">Billing Address (Optional)</label>
+                              <textarea
+                                value={customerForm.billingAddress}
+                                onChange={(e) => setCustomerForm({ ...customerForm, billingAddress: e.target.value })}
+                                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-violet-500 focus:outline-none"
+                                placeholder="Enter your billing address (if different from shipping)"
+                                rows={2}
+                              />
+                            </div>
+                          </div>
+                          
+                          {/* Payment Method */}
+                          <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4">
+                            <h3 className="text-white font-bold text-lg mb-4">Payment Method</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'momo' ? 'border-violet-500 bg-violet-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  value="momo"
+                                  checked={paymentMethod === 'momo'}
+                                  onChange={() => setPaymentMethod('momo')}
+                                  className="sr-only"
+                                />
+                                <div className="flex items-center gap-3">
+                                  <div className="text-3xl">📱</div>
+                                  <div>
+                                    <div className="text-white font-semibold">Mobile Money</div>
+                                    <div className="text-gray-400 text-sm">Pay with MoMo</div>
+                                  </div>
+                                </div>
+                              </label>
+                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'card' ? 'border-violet-500 bg-violet-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  value="card"
+                                  checked={paymentMethod === 'card'}
+                                  onChange={() => setPaymentMethod('card')}
+                                  className="sr-only"
+                                />
+                                <div className="flex items-center gap-3">
+                                  <div className="text-3xl">💳</div>
+                                  <div>
+                                    <div className="text-white font-semibold">Card Payment</div>
+                                    <div className="text-gray-400 text-sm">Visa / Mastercard</div>
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+                            {!paymentMethod && (
+                              <p className="text-yellow-400 text-sm mt-3">Please select a payment method to continue</p>
+                            )}
+                          </div>
+                          
                           <button
                             onClick={confirmOrder}
-                            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-xl transition text-lg"
+                            disabled={!paymentMethod}
+                            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition text-lg"
                           >
-                            Confirm Order
+                            Confirm Order - ₵{getCartTotal().toFixed(2)}
                           </button>
                         </>
                       ) : (
                         <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-6 text-center">
-                          <div className="text-green-400 text-lg font-semibold mb-2">Order Confirmed!</div>
-                          <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
-                            <div className="text-gray-400 text-sm mb-1">Order Number</div>
-                            <div className="text-2xl font-bold text-white">{orderDetails?.orderNumber}</div>
+                          <div className="text-green-400 text-lg font-semibold mb-4">Order Confirmed!</div>
+                          
+                          <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="bg-gray-800/50 rounded-lg p-4">
+                              <div className="text-gray-400 text-sm mb-1">Order Number</div>
+                              <div className="text-xl font-bold text-white">{orderDetails?.orderNumber}</div>
+                            </div>
+                            <div className="bg-gray-800/50 rounded-lg p-4">
+                              <div className="text-gray-400 text-sm mb-1">Tracking Number</div>
+                              <div className="text-xl font-bold text-violet-400">{orderDetails?.trackingNumber}</div>
+                            </div>
+                            <div className="bg-gray-800/50 rounded-lg p-4 col-span-2">
+                              <div className="text-gray-400 text-sm mb-1">Payment Reference</div>
+                              <div className="text-xl font-bold text-yellow-400">{paymentReference}</div>
+                            </div>
                           </div>
-                          <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
-                            <div className="text-gray-400 text-sm mb-1">Tracking Number</div>
-                            <div className="text-2xl font-bold text-violet-400">{orderDetails?.trackingNumber}</div>
+                          
+                          <div className="bg-gray-800/50 rounded-xl p-4 mb-6 text-left">
+                            <h4 className="text-white font-semibold mb-3">Payment Instructions</h4>
+                            <p className="text-gray-300 mb-2">Please make your payment of <span className="text-green-400 font-bold">₵{getCartTotal().toFixed(2)}</span> to:</p>
+                            <div className="text-3xl font-bold text-white mb-4">0548184293</div>
+                            <p className="text-gray-400 text-sm">Use your Payment Reference: <span className="text-yellow-400 font-mono">{paymentReference}</span></p>
+                            <p className="text-gray-400 text-sm mt-2">After payment, our team will contact you for delivery within 24-48 hours.</p>
                           </div>
-                          <p className="text-gray-300 mb-2">Please make your payment to:</p>
-                          <div className="text-3xl font-bold text-white mb-4">0548184293</div>
-                          <p className="text-gray-400 text-sm mb-4">Save your Order Number and Tracking Number to track your order.</p>
-                          <p className="text-gray-400 text-sm mb-4">After payment, our team will contact you for delivery.</p>
+                          
+                          <div className="text-left bg-violet-900/30 rounded-lg p-4 mb-6">
+                            <h4 className="text-white font-semibold mb-2">What is Next?</h4>
+                            <ul className="text-gray-300 text-sm space-y-1">
+                              <li>✓ Save your Order Number: {orderDetails?.orderNumber}</li>
+                              <li>✓ Save your Tracking Number: {orderDetails?.trackingNumber}</li>
+                              <li>✓ Make payment to complete your order</li>
+                              <li>✓ We will contact you after payment confirmation</li>
+                            </ul>
+                          </div>
+                          
                           <button
                             onClick={() => {
                               setCart([]);
                               setShowCheckout(false);
                               setShowPayment(false);
                               setOrderDetails(null);
-                              setCustomerForm({ fullName: "", phoneNumber: "", email: "", shippingAddress: "" });
+                              setPaymentReference("");
+                              setCustomerForm({ fullName: "", phoneNumber: "", email: "", shippingAddress: "", billingAddress: "", city: "", region: "" });
+                              setAppliedPromo(null);
+                              setPromoCode("");
+                              setPaymentMethod(null);
                               setActiveTab("home");
                             }}
-                            className="mt-6 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+                            className="mt-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-8 py-3 rounded-xl transition"
                           >
                             Done
                           </button>
