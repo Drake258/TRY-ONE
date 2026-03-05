@@ -76,6 +76,33 @@ export async function initializeDatabase() {
       }
     }
 
+    // Seed staff user: rightclickcomputerdigitals2010@gmailcom
+    const existingStaff = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, "rightclickcomputerdigitals2010@gmailcom"));
+
+    if (existingStaff.length === 0) {
+      const staffPasswordHash = await hashPassword("Daniel2026");
+      await db.insert(users).values({
+        username: "rightclickcomputerdigitals2010@gmailcom",
+        passwordHash: staffPasswordHash,
+        role: "staff",
+        status: "active",
+      });
+      console.log("✅ Staff user 'rightclickcomputerdigitals2010@gmailcom' created");
+    } else {
+      // Ensure the user has staff role
+      const staff = existingStaff[0];
+      if (staff.role !== "staff") {
+        await db
+          .update(users)
+          .set({ role: "staff" })
+          .where(eq(users.id, staff.id));
+        console.log("✅ Updated user to staff role");
+      }
+    }
+
     // Seed system settings
     const defaultSettings = [
       { key: "site_name", value: "RIGHTCLICK COMPUTER DIGITALS" },
