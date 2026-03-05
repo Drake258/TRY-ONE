@@ -68,6 +68,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Manual payment confirmation for MoMo and refund processing
 - [x] Invoice generation: Text-based invoice download
 - [x] Fix lint warnings: add eslint-disable comments for img elements and useEffect dependencies
+- [x] Add staff user: rightclickcomputerdigitals2010@gmailcom with password Daniel2026
 
 ## Current Structure
 
@@ -110,6 +111,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 |----------|----------|------|
 | Blessing | Bless@2011 | admin |
 | Boss | Boss@Rightclick | admin |
+| rightclickcomputerdigitals2010@gmailcom | Daniel2026 | staff |
 
 ## API Routes
 
@@ -144,3 +146,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-03-04 | Add order tracking with order numbers and tracking numbers, customer checkout form, AI order lookup
 | 2026-03-04 | Add official RightClick Computer Digitals logo (SVG), favicon, change color scheme to purple/violet theme throughout application |
 | 2026-03-04 | Enhanced checkout: promo codes (WELCOME10, SAVE50, NEWUSER), payment methods, admin orders management, invoice generation |
+| 2026-03-05 | Add staff user: rightclickcomputerdigitals2010@gmailcom with password Daniel2026 |
