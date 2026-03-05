@@ -25,9 +25,13 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isAiMode, setIsAiMode] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sessionInitialized = useRef(false);
 
   // Initialize chat session
   useEffect(() => {
+    if (sessionInitialized.current) return;
+    sessionInitialized.current = true;
+    
     const initSession = async () => {
       try {
         const response = await fetch("/api/chat/session", {
@@ -39,7 +43,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
           setSessionId(data.sessionId);
           
           // Add welcome message if this is a new session
-          if (data.welcomeMessage && messages.length === 0) {
+          if (data.welcomeMessage) {
             setMessages([
               {
                 id: Date.now().toString(),
@@ -53,6 +57,16 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
         }
       } catch (error) {
         console.error("Failed to initialize chat session:", error);
+        // Add fallback welcome message on error
+        setMessages([
+          {
+            id: Date.now().toString(),
+            text: "Hello! Welcome to RIGHTCLICK COMPUTER DIGITALS. How can I help you today?",
+            sender: "ai",
+            senderName: "RIGHTCLICK Assistant",
+            timestamp: new Date(),
+          },
+        ]);
       }
     };
 

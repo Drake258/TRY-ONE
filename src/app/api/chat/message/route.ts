@@ -8,6 +8,11 @@ function findBestResponse(
   userMessage: string,
   responses: any[]
 ): { response: string; type: string; metadata?: any } | null {
+  // If no responses in database, use fallback
+  if (!responses || responses.length === 0) {
+    return getFallbackResponse(userMessage);
+  }
+  
   const messageLower = userMessage.toLowerCase();
   
   // Sort by priority (higher first)
@@ -75,6 +80,65 @@ function findBestResponse(
   };
 }
 
+// Fallback responses when database is empty
+function getFallbackResponse(userMessage: string): { response: string; type: string; metadata?: any } {
+  const messageLower = userMessage.toLowerCase();
+  
+  // Greetings
+  if (messageLower.match(/^(hello|hi|hey|good morning|good afternoon|good evening)/)) {
+    return {
+      response: "Hello! Welcome to RIGHTCLICK COMPUTER DIGITALS. I'm here to help you with any questions about our products, services, orders, or technical support. How can I assist you today?",
+      type: "greeting",
+    };
+  }
+  
+  // Order status
+  if (messageLower.includes("order") || messageLower.includes("track") || messageLower.includes("delivery")) {
+    return {
+      response: "To check your order status, please provide your order number (format: RC-XXXXX) or your phone number. You can also call us at 0503819000 for immediate assistance.",
+      type: "order_query",
+    };
+  }
+  
+  // Payment
+  if (messageLower.includes("payment") || messageLower.includes("pay") || messageLower.includes("momo")) {
+    return {
+      response: "We accept Mobile Money (MoMo), Bank Transfer, Card Payments, and Cash. To pay via MoMo, send amount to 0503819000 with your order number as reference.",
+      type: "payment",
+    };
+  }
+  
+  // Shipping
+  if (messageLower.includes("shipping") || messageLower.includes("delivery") || messageLower.includes("deliver")) {
+    return {
+      response: "We offer same-day delivery within Accra and 2-5 business days for other regions. You can also pick up from our store. Delivery fees vary by location.",
+      type: "shipping",
+    };
+  }
+  
+  // Contact
+  if (messageLower.includes("contact") || messageLower.includes("phone") || messageLower.includes("call")) {
+    return {
+      response: "You can reach us at 0503819000 (call/WhatsApp), email info@rightclickdigitals.com, or visit our store in Accra, Ghana. We're open Monday-Friday 8AM-6PM.",
+      type: "general",
+    };
+  }
+  
+  // Price/Pricing
+  if (messageLower.includes("price") || messageLower.includes("cost") || messageLower.includes("how much")) {
+    return {
+      response: "We have laptops for all budgets: Budget (₵5,000-₵8,000), Mid-range (₵8,000-₵15,000), High-performance (₵15,000-₵25,000), Gaming (₵18,000-₵35,000). Would you like specific recommendations?",
+      type: "pricing",
+    };
+  }
+  
+  // Default fallback
+  return {
+    response: "Thank you for contacting RIGHTCLICK COMPUTER DIGITALS! I'm here to help with product information, order tracking, payments, and technical support. Could you please provide more details about your question? You can also call us at 0503819000 for immediate assistance.",
+    type: "general",
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -111,11 +175,16 @@ export async function POST(request: NextRequest) {
     });
 
     // Get AI responses from database
-    const aiResponsesData = await db
-      .select()
-      .from(aiResponses)
-      .where(sql`${aiResponses.isActive} = 1`)
-      .orderBy(desc(aiResponses.priority));
+    let aiResponsesData: any[] = [];
+    try {
+      aiResponsesData = await db
+        .select()
+        .from(aiResponses)
+        .where(sql`${aiResponses.isActive} = 1`)
+        .orderBy(desc(aiResponses.priority));
+    } catch (error) {
+      console.error("Error fetching AI responses:", error);
+    }
 
     // Find best response
     const aiResult = findBestResponse(message, aiResponsesData);
