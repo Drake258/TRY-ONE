@@ -50,6 +50,13 @@
       "when": 1772187304390,
       "tag": "0006_users_password_change",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1772187304391,
+      "tag": "0007_inventory_coupons_wishlist",
+      "breakpoints": true
     }
   ]
 }

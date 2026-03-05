@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { orders } from "@/db/schema";
-import { eq, or, ilike, desc } from "drizzle-orm";
+import { orders, products, stockHistory, stockAlerts } from "@/db/schema";
+import { eq, or, ilike, desc, and } from "drizzle-orm";
 
 // Generate unique order and tracking numbers
 function generateOrderNumber(): string {
@@ -14,6 +14,79 @@ function generateTrackingNumber(): string {
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `TRK-${timestamp}-${random}`;
+}
+
+// Function to reduce stock when order is placed
+async function reduceStock(items: any[], orderId: number, orderNumber: string) {
+  for (const item of items) {
+    const productId = item.id || item.productId;
+    if (!productId) continue;
+
+    const [product] = await db.select().from(products).where(eq(products.id, productId)).limit(1);
+    if (!product) continue;
+
+    const quantity = item.quantity || 1;
+    const previousStock = product.stockQuantity || 0;
+    const newStock = Math.max(0, previousStock - quantity);
+
+    // Update product stock
+    await db.update(products)
+      .set({
+        stockQuantity: newStock,
+        inStock: newStock > 0,
+        updatedAt: new Date()
+      })
+      .where(eq(products.id, productId));
+
+    // Record stock history
+    await db.insert(stockHistory).values({
+      productId,
+      changeType: "sale",
+      quantity: -quantity,
+      previousStock,
+      newStock,
+      reason: `Order ${orderNumber}`,
+      orderId,
+    });
+
+    // Check for low stock alert
+    if (newStock > 0 && newStock <= product.lowStockThreshold) {
+      // Check if alert already exists
+      const existingAlerts = await db.select()
+        .from(stockAlerts)
+        .where(and(
+          eq(stockAlerts.productId, productId),
+          eq(stockAlerts.isResolved, false)
+        ));
+
+      if (existingAlerts.length === 0) {
+        await db.insert(stockAlerts).values({
+          productId,
+          alertType: "low_stock",
+          message: `Low stock alert: ${product.name} has only ${newStock} units left`,
+        });
+      }
+    }
+
+    // Check for out of stock
+    if (newStock === 0 && previousStock > 0) {
+      const existingOutOfStock = await db.select()
+        .from(stockAlerts)
+        .where(and(
+          eq(stockAlerts.productId, productId),
+          eq(stockAlerts.alertType, "out_of_stock"),
+          eq(stockAlerts.isResolved, false)
+        ));
+
+      if (existingOutOfStock.length === 0) {
+        await db.insert(stockAlerts).values({
+          productId,
+          alertType: "out_of_stock",
+          message: `Out of stock: ${product.name} is now out of stock`,
+        });
+      }
+    }
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -48,7 +121,7 @@ export async function POST(request: NextRequest) {
     const trackingNumber = generateTrackingNumber();
 
     // Create the order
-    const newOrder = await db.insert(orders).values({
+    const [newOrder] = await db.insert(orders).values({
       orderNumber,
       trackingNumber,
       customerName,
@@ -67,7 +140,10 @@ export async function POST(request: NextRequest) {
       status: "confirmed",
       paymentStatus: "pending",
       notes: notes || null,
-    });
+    }).returning();
+
+    // Reduce stock for each item in the order
+    await reduceStock(items, newOrder.id, orderNumber);
 
     return NextResponse.json({
       success: true,

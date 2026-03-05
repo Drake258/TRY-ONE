@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name, category, description, price, imageUrl, processor, ram, storage, graphics, operatingSystem, inStock, featured } = body;
+    const { name, category, description, price, imageUrl, processor, ram, storage, graphics, operatingSystem, inStock, featured, stockQuantity, lowStockThreshold } = body;
 
     if (!name || !category || price === undefined) {
       return NextResponse.json({ error: "Name, category, and price are required" }, { status: 400 });
@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
       operatingSystem: operatingSystem || null,
       inStock: inStock !== false,
       featured: featured === true,
+      stockQuantity: stockQuantity || 0,
+      lowStockThreshold: lowStockThreshold || 5,
       createdBy: session.user.id,
     }).returning();
 

@@ -16,6 +16,8 @@ const navItems = [
   { href: "/admin/products", label: "Products", icon: "🖥️" },
   { href: "/admin/services", label: "Services", icon: "🔧" },
   { href: "/admin/orders", label: "Orders", icon: "📦" },
+  { href: "/admin/stock", label: "Stock", icon: "📊" },
+  { href: "/admin/coupons", label: "Coupons", icon: "🏷️" },
   { href: "/admin/applications", label: "Applications", icon: "📝", adminOnly: true },
   { href: "/admin/chat", label: "AI Chat", icon: "💬" },
   { href: "/admin/users/new", label: "Create Staff", icon: "➕", adminOnly: true },

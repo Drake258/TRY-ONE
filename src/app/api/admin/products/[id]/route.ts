@@ -14,7 +14,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
   try {
     const body = await request.json();
-    const { name, category, description, price, imageUrl, processor, ram, storage, graphics, operatingSystem, inStock, featured } = body;
+    const { name, category, description, price, imageUrl, processor, ram, storage, graphics, operatingSystem, inStock, featured, stockQuantity, lowStockThreshold } = body;
 
     const [updated] = await db.update(products).set({
       name,
@@ -29,6 +29,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       operatingSystem: operatingSystem || null,
       inStock,
       featured,
+      stockQuantity: stockQuantity !== undefined ? stockQuantity : undefined,
+      lowStockThreshold: lowStockThreshold !== undefined ? lowStockThreshold : undefined,
       updatedAt: new Date(),
     }).where(eq(products.id, productId)).returning();
 

@@ -17,6 +17,8 @@ type ProductData = {
   operatingSystem: string;
   inStock: boolean;
   featured: boolean;
+  stockQuantity: string;
+  lowStockThreshold: string;
 };
 
 const defaultData: ProductData = {
@@ -32,6 +34,8 @@ const defaultData: ProductData = {
   operatingSystem: "",
   inStock: true,
   featured: false,
+  stockQuantity: "0",
+  lowStockThreshold: "5",
 };
 
 export default function ProductForm({ initialData }: { initialData?: Partial<ProductData> & { id?: number } }) {
@@ -62,7 +66,12 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, price: parseFloat(form.price) }),
+        body: JSON.stringify({ 
+          ...form, 
+          price: parseFloat(form.price),
+          stockQuantity: parseInt(form.stockQuantity) || 0,
+          lowStockThreshold: parseInt(form.lowStockThreshold) || 5
+        }),
       });
 
       const data = await res.json();
@@ -286,6 +295,40 @@ export default function ProductForm({ initialData }: { initialData?: Partial<Pro
               <div className="text-gray-500 text-xs">Show on homepage featured section</div>
             </div>
           </label>
+        </div>
+      </div>
+
+      {/* Stock Management */}
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+        <h2 className="text-white font-semibold mb-5">📦 Stock Management</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label className={labelClass}>Stock Quantity *</label>
+            <input
+              type="number"
+              name="stockQuantity"
+              value={form.stockQuantity}
+              onChange={handleChange}
+              min="0"
+              required
+              className={inputClass}
+              placeholder="e.g. 50"
+            />
+            <div className="text-gray-500 text-xs mt-1">Current number of items in stock</div>
+          </div>
+          <div>
+            <label className={labelClass}>Low Stock Threshold</label>
+            <input
+              type="number"
+              name="lowStockThreshold"
+              value={form.lowStockThreshold}
+              onChange={handleChange}
+              min="1"
+              className={inputClass}
+              placeholder="e.g. 5"
+            />
+            <div className="text-gray-500 text-xs mt-1">Alert when stock falls below this</div>
+          </div>
         </div>
       </div>
 

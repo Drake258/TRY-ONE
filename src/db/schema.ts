@@ -26,6 +26,8 @@ export const products = sqliteTable("products", {
   graphics: text("graphics"),
   operatingSystem: text("operating_system"),
   inStock: integer("in_stock", { mode: "boolean" }).notNull().default(true),
+  stockQuantity: integer("stock_quantity").notNull().default(0), // Current stock count
+  lowStockThreshold: integer("low_stock_threshold").notNull().default(5), // Alert when stock falls below this
   featured: integer("featured", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
@@ -145,7 +147,7 @@ export const orders = sqliteTable("orders", {
   billingAddress: text("billing_address"),
   city: text("city"),
   region: text("region"),
-  items: text("items").notNull(), // JSON string of cart items
+  items: text("items").notNull(),
   totalAmount: real("total_amount").notNull(),
   discount: real("discount"),
   promoCode: text("promo_code"),
@@ -156,4 +158,56 @@ export const orders = sqliteTable("orders", {
   notes: text("notes"),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+// Stock History - tracks all stock changes
+export const stockHistory = sqliteTable("stock_history", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  productId: integer("product_id").notNull(),
+  changeType: text("change_type", { enum: ["sale", "restock", "adjustment", "return", "damage"] }).notNull(),
+  quantity: integer("quantity").notNull(),
+  previousStock: integer("previous_stock").notNull(),
+  newStock: integer("new_stock").notNull(),
+  reason: text("reason"),
+  orderId: integer("order_id"),
+  performedBy: integer("performed_by"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+// Stock Alerts - notifications for low stock
+export const stockAlerts = sqliteTable("stock_alerts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  productId: integer("product_id").notNull(),
+  alertType: text("alert_type", { enum: ["low_stock", "out_of_stock", "restock_needed"] }).notNull(),
+  message: text("message").notNull(),
+  isRead: integer("is_read", { mode: "boolean" }).notNull().default(false),
+  isResolved: integer("is_resolved", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  resolvedAt: integer("resolved_at", { mode: "timestamp" }),
+});
+
+// Coupon/Discount Codes
+export const coupons = sqliteTable("coupons", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  code: text("code").notNull().unique(),
+  description: text("description"),
+  discountType: text("discount_type", { enum: ["percentage", "fixed"] }).notNull(),
+  discountValue: real("discount_value").notNull(),
+  minOrderAmount: real("min_order_amount"),
+  maxUses: integer("max_uses"),
+  usedCount: integer("used_count").notNull().default(0),
+  maxUsesPerUser: integer("max_uses_per_user"),
+  validFrom: integer("valid_from", { mode: "timestamp" }),
+  validUntil: integer("valid_until", { mode: "timestamp" }),
+  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+// Customer Wishlist
+export const wishlist = sqliteTable("wishlist", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  sessionId: text("session_id").notNull(),
+  productId: integer("product_id").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });

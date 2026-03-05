@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { users, products, systemSettings } from "./schema";
+import { users, products, systemSettings, coupons } from "./schema";
 import { eq } from "drizzle-orm";
 
 // Simple password hashing using Web Crypto API (SHA-256 with salt)
@@ -93,6 +93,8 @@ async function seed() {
         operatingSystem: "Windows 11 Pro",
         inStock: true,
         featured: true,
+        stockQuantity: 15,
+        lowStockThreshold: 5,
       },
       {
         name: "GameForce X Pro",
@@ -107,6 +109,8 @@ async function seed() {
         operatingSystem: "Windows 11 Home",
         inStock: true,
         featured: true,
+        stockQuantity: 8,
+        lowStockThreshold: 3,
       },
       {
         name: "WorkStation Tower Pro",
@@ -121,6 +125,8 @@ async function seed() {
         operatingSystem: "Windows 11 Pro",
         inStock: true,
         featured: true,
+        stockQuantity: 5,
+        lowStockThreshold: 2,
       },
       {
         name: "BudgetBook 14",
@@ -345,6 +351,68 @@ async function seed() {
     console.log("✅ Sample products seeded");
   } else {
     console.log("ℹ️  Products already exist, skipping seed");
+  }
+
+  // Seed sample coupons
+  const existingCoupons = await db.select().from(coupons);
+  if (existingCoupons.length === 0) {
+    const validFrom = new Date();
+    const validUntil = new Date();
+    validUntil.setMonth(validUntil.getMonth() + 3); // 3 months from now
+
+    await db.insert(coupons).values([
+      {
+        code: "WELCOME10",
+        description: "10% off for new customers",
+        discountType: "percentage",
+        discountValue: 10,
+        minOrderAmount: 100,
+        maxUses: 100,
+        maxUsesPerUser: 1,
+        validFrom,
+        validUntil,
+        isActive: true,
+      },
+      {
+        code: "SAVE50",
+        description: "₵50 off on orders over ₵500",
+        discountType: "fixed",
+        discountValue: 50,
+        minOrderAmount: 500,
+        maxUses: 50,
+        maxUsesPerUser: 2,
+        validFrom,
+        validUntil,
+        isActive: true,
+      },
+      {
+        code: "NEWUSER",
+        description: "15% off for first-time buyers",
+        discountType: "percentage",
+        discountValue: 15,
+        minOrderAmount: 200,
+        maxUses: 200,
+        maxUsesPerUser: 1,
+        validFrom,
+        validUntil,
+        isActive: true,
+      },
+      {
+        code: "SUMMER25",
+        description: "25% off summer sale",
+        discountType: "percentage",
+        discountValue: 25,
+        minOrderAmount: 300,
+        maxUses: 30,
+        maxUsesPerUser: 1,
+        validFrom,
+        validUntil,
+        isActive: true,
+      },
+    ]);
+    console.log("✅ Sample coupons seeded");
+  } else {
+    console.log("ℹ️  Coupons already exist, skipping seed");
   }
 
   console.log("🎉 Database seeding complete!");
