@@ -55,7 +55,7 @@ export default function HomePage() {
   const [promoLoading, setPromoLoading] = useState(false);
   
   // Payment method state
-  const [paymentMethod, setPaymentMethod] = useState<"momo" | "card" | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"mtn" | "telecel" | "airteltigo" | "visa" | null>(null);
   const [paymentReference, setPaymentReference] = useState("");
   const [processingPayment, setProcessingPayment] = useState(false);
   
@@ -204,7 +204,7 @@ export default function HomePage() {
           billingAddress: customerForm.billingAddress || undefined,
           items: orderItems,
           totalAmount: getCartTotal(),
-          paymentMethod: paymentMethod || 'momo',
+          paymentMethod: paymentMethod || 'mtn',
           promoCode: appliedPromo?.code || null,
           discount: appliedPromo ? (appliedPromo.discountType === 'percent' ? (getCartTotal() * appliedPromo.discount / 100) : appliedPromo.discount) : null,
           paymentReference: ref,
@@ -810,39 +810,67 @@ export default function HomePage() {
                           
                           {/* Payment Method */}
                           <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-4">
-                            <h3 className="text-white font-bold text-lg mb-4">Payment Method</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'momo' ? 'border-violet-500 bg-violet-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+                            <h3 className="text-white font-bold text-lg mb-4">Select Payment Method</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'mtn' ? 'border-yellow-500 bg-yellow-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
                                 <input
                                   type="radio"
                                   name="paymentMethod"
-                                  value="momo"
-                                  checked={paymentMethod === 'momo'}
-                                  onChange={() => setPaymentMethod('momo')}
+                                  value="mtn"
+                                  checked={paymentMethod === 'mtn'}
+                                  onChange={() => setPaymentMethod('mtn')}
                                   className="sr-only"
                                 />
-                                <div className="flex items-center gap-3">
-                                  <div className="text-3xl">📱</div>
-                                  <div>
-                                    <div className="text-white font-semibold">Mobile Money</div>
-                                    <div className="text-gray-400 text-sm">Pay with MoMo</div>
-                                  </div>
+                                <div className="text-center">
+                                  <div className="text-3xl mb-2">📱</div>
+                                  <div className="text-white font-semibold">MTN</div>
+                                  <div className="text-gray-400 text-xs">Mobile Money</div>
                                 </div>
                               </label>
-                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'card' ? 'border-violet-500 bg-violet-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'telecel' ? 'border-red-500 bg-red-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
                                 <input
                                   type="radio"
                                   name="paymentMethod"
-                                  value="card"
-                                  checked={paymentMethod === 'card'}
-                                  onChange={() => setPaymentMethod('card')}
+                                  value="telecel"
+                                  checked={paymentMethod === 'telecel'}
+                                  onChange={() => setPaymentMethod('telecel')}
                                   className="sr-only"
                                 />
-                                <div className="flex items-center gap-3">
+                                <div className="text-center">
+                                  <div className="text-3xl mb-2">📱</div>
+                                  <div className="text-white font-semibold">Telecel</div>
+                                  <div className="text-gray-400 text-xs">Mobile Money</div>
+                                </div>
+                              </label>
+                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'airteltigo' ? 'border-orange-500 bg-orange-900/20' : 'border-gray-700 hover:border-gray-600'}`}>
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  value="airteltigo"
+                                  checked={paymentMethod === 'airteltigo'}
+                                  onChange={() => setPaymentMethod('airteltigo')}
+                                  className="sr-only"
+                                />
+                                <div className="text-center">
+                                  <div className="text-3xl mb-2">📱</div>
+                                  <div className="text-white font-semibold">AirtelTigo</div>
+                                  <div className="text-gray-400 text-xs">Mobile Money</div>
+                                </div>
+                              </label>
+                              <label className={`cursor-pointer bg-gray-900 border-2 rounded-xl p-4 transition ${paymentMethod === 'visa' ? 'border-blue-500 bg-blue-900/20' : 'border-gray-700 hover:border-gray-600'} col-span-2 md:col-span-3`}>
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  value="visa"
+                                  checked={paymentMethod === 'visa'}
+                                  onChange={() => setPaymentMethod('visa')}
+                                  className="sr-only"
+                                />
+                                <div className="flex items-center justify-center gap-3">
                                   <div className="text-3xl">💳</div>
                                   <div>
-                                    <div className="text-white font-semibold">Card Payment</div>
-                                    <div className="text-gray-400 text-sm">Visa / Mastercard</div>
+                                    <div className="text-white font-semibold">Visa / Mastercard / Card</div>
+                                    <div className="text-gray-400 text-sm">Pay with your bank card</div>
                                   </div>
                                 </div>
                               </label>
@@ -881,10 +909,20 @@ export default function HomePage() {
                           
                           <div className="bg-gray-800/50 rounded-xl p-4 mb-6 text-left">
                             <h4 className="text-white font-semibold mb-3">Payment Instructions</h4>
-                            <p className="text-gray-300 mb-2">Please make your payment of <span className="text-green-400 font-bold">₵{getCartTotal().toFixed(2)}</span> to:</p>
-                            <div className="text-3xl font-bold text-white mb-4">0548184293</div>
-                            <p className="text-gray-400 text-sm">Use your Payment Reference: <span className="text-yellow-400 font-mono">{paymentReference}</span></p>
-                            <p className="text-gray-400 text-sm mt-2">After payment, our team will contact you for delivery within 24-48 hours.</p>
+                            {paymentMethod === 'visa' ? (
+                              <>
+                                <p className="text-gray-300 mb-2">Please make your payment of <span className="text-green-400 font-bold">₵{getCartTotal().toFixed(2)}</span> using your Visa/Mastercard:</p>
+                                <p className="text-gray-400 text-sm mb-2">Enter your card details on the payment page after confirming your order.</p>
+                                <p className="text-gray-400 text-sm">Payment Reference: <span className="text-yellow-400 font-mono">{paymentReference}</span></p>
+                              </>
+                            ) : (
+                              <>
+                                <p className="text-gray-300 mb-2">Please make your payment of <span className="text-green-400 font-bold">₵{getCartTotal().toFixed(2)}</span> to:</p>
+                                <div className="text-3xl font-bold text-white mb-4">0548184293</div>
+                                <p className="text-gray-400 text-sm">Use your Payment Reference: <span className="text-yellow-400 font-mono">{paymentReference}</span></p>
+                                <p className="text-gray-400 text-sm mt-2">After payment, our team will contact you for delivery within 24-48 hours.</p>
+                              </>
+                            )}
                           </div>
                           
                           <div className="text-left bg-violet-900/30 rounded-lg p-4 mb-6">
