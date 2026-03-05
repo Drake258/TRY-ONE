@@ -10,6 +10,7 @@ export const users = sqliteTable("users", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   createdBy: integer("created_by"),
   lastLogin: integer("last_login", { mode: "timestamp" }),
+  mustChangePassword: integer("must_change_password", { mode: "boolean" }).notNull().default(false),
 });
 
 export const products = sqliteTable("products", {

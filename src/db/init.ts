@@ -103,6 +103,32 @@ export async function initializeDatabase() {
       }
     }
 
+    // Seed staff user: Danny (Regular Staff with force password change)
+    const existingDanny = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, "Danny"));
+
+    if (existingDanny.length === 0) {
+      const dannyPasswordHash = await hashPassword("Danny@2026");
+      await db.insert(users).values({
+        username: "Danny",
+        passwordHash: dannyPasswordHash,
+        role: "staff",
+        status: "active",
+        mustChangePassword: true,
+      });
+      console.log("✅ Staff user 'Danny' created with force password change");
+    } else {
+      // Ensure Danny has staff role and must change password
+      const danny = existingDanny[0];
+      await db
+        .update(users)
+        .set({ role: "staff", mustChangePassword: true })
+        .where(eq(users.id, danny.id));
+      console.log("✅ Updated user 'Danny' to staff role with password change required");
+    }
+
     // Seed system settings
     const defaultSettings = [
       { key: "site_name", value: "RIGHTCLICK COMPUTER DIGITALS" },

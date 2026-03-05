@@ -39,6 +39,30 @@ export async function POST(request: NextRequest) {
     // Update last login
     await db.update(users).set({ lastLogin: new Date() }).where(eq(users.id, user.id));
 
+    // Check if user must change password
+    if (user.mustChangePassword) {
+      await logActivity(user.id, username, "LOGIN_SUCCESS_PWD_CHANGE_REQ", "auth", String(user.id), "Login successful - password change required");
+      
+      // Create session but indicate password change is required
+      const sessionId = await createSession(user.id);
+      
+      const cookieStore = await cookies();
+      cookieStore.set("rightclick_session", sessionId, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60,
+        path: "/",
+      });
+
+      return NextResponse.json({ 
+        success: true, 
+        role: user.role,
+        mustChangePassword: true,
+        message: "You must change your password before continuing"
+      });
+    }
+
     const sessionId = await createSession(user.id);
 
     const cookieStore = await cookies();
