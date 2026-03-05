@@ -69,6 +69,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Invoice generation: Text-based invoice download
 - [x] Fix lint warnings: add eslint-disable comments for img elements and useEffect dependencies
 - [x] Add staff user: rightclickcomputerdigitals2010@gmailcom with password Daniel2026
+- [x] Add regular staff user Danny with force password change on first login
 
 ## Current Structure
 
@@ -112,6 +113,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | Blessing | Bless@2011 | admin |
 | Boss | Boss@Rightclick | admin |
 | rightclickcomputerdigitals2010@gmailcom | Daniel2026 | staff |
+| Danny | Danny@2026 | staff (force password change) |
 
 ## API Routes
 
@@ -119,6 +121,7 @@ The application is a complete marketing and management software for RIGHTCLICK C
 |-------|--------|---------|
 | `/api/auth/login` | POST | Staff login |
 | `/api/auth/logout` | POST | Staff logout |
+| `/api/auth/change-password` | POST | Change password (for forced password change) |
 | `/api/admin/products` | POST | Create product |
 | `/api/admin/products/[id]` | PUT/DELETE | Update/delete product |
 | `/api/admin/users` | POST | Create admin user |
@@ -147,3 +150,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-03-04 | Add official RightClick Computer Digitals logo (SVG), favicon, change color scheme to purple/violet theme throughout application |
 | 2026-03-04 | Enhanced checkout: promo codes (WELCOME10, SAVE50, NEWUSER), payment methods, admin orders management, invoice generation |
 | 2026-03-05 | Add staff user: rightclickcomputerdigitals2010@gmailcom with password Daniel2026 |
+| 2026-03-05 | Add regular staff user Danny with force password change on first login |
