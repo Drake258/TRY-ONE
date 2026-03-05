@@ -29,6 +29,27 @@
       "when": 1772187304387,
       "tag": "0003_ai_assistant_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1772187304388,
+      "tag": "0004_orders_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1772187304389,
+      "tag": "0005_orders_enhanced",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1772187304390,
+      "tag": "0006_users_password_change",
+      "breakpoints": true
     }
   ]
 }
