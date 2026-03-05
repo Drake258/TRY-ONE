@@ -151,3 +151,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-03-04 | Enhanced checkout: promo codes (WELCOME10, SAVE50, NEWUSER), payment methods, admin orders management, invoice generation |
 | 2026-03-05 | Add staff user: rightclickcomputerdigitals2010@gmailcom with password Daniel2026 |
 | 2026-03-05 | Add regular staff user Danny with force password change on first login |
+| 2026-03-05 | Fix AI Assistant: add fallback responses, error handling, and session initialization improvements |
