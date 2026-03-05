@@ -57,6 +57,13 @@
       "when": 1772187304391,
       "tag": "0007_inventory_coupons_wishlist",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1772187304392,
+      "tag": "0008_advanced_ecommerce_features",
+      "breakpoints": true
     }
   ]
 }
