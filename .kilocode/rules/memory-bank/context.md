@@ -70,6 +70,8 @@ The application is a complete marketing and management software for RIGHTCLICK C
 - [x] Fix lint warnings: add eslint-disable comments for img elements and useEffect dependencies
 - [x] Add staff user: rightclickcomputerdigitals2010@gmailcom with password Daniel2026
 - [x] Add regular staff user Danny with force password change on first login
+- [x] Fix migration journal: add missing entries for orders tables and password change field
+- [x] Add specific payment method options: MTN, Telecel, AirtelTigo, Visa/Card to checkout
 
 ## Current Structure
 
@@ -153,3 +155,4 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-03-05 | Add regular staff user Danny with force password change on first login |
 | 2026-03-05 | Fix AI Assistant: add fallback responses, error handling, and session initialization improvements |
 | 2026-03-05 | Fix migration journal: add missing entries for orders tables and password change field |
+| 2026-03-05 | Add specific payment method options: MTN, Telecel, AirtelTigo, Visa/Card to checkout |
