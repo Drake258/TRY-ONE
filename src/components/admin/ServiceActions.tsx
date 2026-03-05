@@ -37,7 +37,7 @@ export default function ServiceActions({ serviceId }: Props) {
     <div className="flex items-center justify-end gap-2">
       <button
         onClick={() => router.push(`/admin/services/${serviceId}/edit`)}
-        className="p-2 text-gray-400 hover:text-violet-400 hover:bg-violet-500/10 rounded-lg transition"
+        className="p-2 text-gray-400 hover:text-orange-400 hover:bg-orange-500/10 rounded-lg transition"
         title="Edit"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

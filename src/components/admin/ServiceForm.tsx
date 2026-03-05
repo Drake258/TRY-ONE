@@ -69,7 +69,7 @@ export default function ServiceForm({ initialData }: { initialData?: Partial<Ser
     }
   }
 
-  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition placeholder-gray-600 text-sm";
+  const inputClass = "w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition placeholder-gray-600 text-sm";
   const labelClass = "block text-gray-300 text-sm font-medium mb-1.5";
 
   return (
@@ -121,7 +121,7 @@ export default function ServiceForm({ initialData }: { initialData?: Partial<Ser
               name="active"
               checked={form.active}
               onChange={handleChange}
-              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-violet-600 focus:ring-violet-500"
+              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-orange-600 focus:ring-orange-500"
             />
             <div>
               <div className="text-white text-sm font-medium">Active</div>
@@ -134,7 +134,7 @@ export default function ServiceForm({ initialData }: { initialData?: Partial<Ser
               name="featured"
               checked={form.featured}
               onChange={handleChange}
-              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-violet-600 focus:ring-violet-500"
+              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-orange-600 focus:ring-orange-500"
             />
             <div>
               <div className="text-white text-sm font-medium">Featured Service</div>
@@ -148,7 +148,7 @@ export default function ServiceForm({ initialData }: { initialData?: Partial<Ser
         <button
           type="submit"
           disabled={loading}
-          className="bg-violet-600 hover:bg-violet-700 disabled:bg-violet-800 text-white font-semibold px-8 py-3 rounded-xl transition flex items-center gap-2"
+          className="bg-orange-600 hover:bg-orange-700 disabled:bg-orange-800 text-white font-semibold px-8 py-3 rounded-xl transition flex items-center gap-2"
         >
           {loading ? (
             <>

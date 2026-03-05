@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { chatSessions, chatMessages, aiResponses, aiSettings, products, orders } from "@/db/schema";
 import { eq, or, and, ilike, desc, sql } from "drizzle-orm";
 
-// Simple NLP-like response matching
+// Simple NLP-like response matching with improved accuracy
 function findBestResponse(
   userMessage: string,
   responses: any[]
@@ -18,55 +18,73 @@ function findBestResponse(
   // Sort by priority (higher first)
   const sortedResponses = [...responses].sort((a, b) => b.priority - a.priority);
 
-  // Check for keyword matches
+  // Check for keyword matches with weighted scoring
+  let bestMatch: any = null;
+  let bestScore = 0;
+  
   for (const r of sortedResponses) {
     if (!r.isActive) continue;
     
     const triggerLower = (r.trigger || "").toLowerCase();
-    const keywords = (r.keywords || "").split(",").map((k: string) => k.trim().toLowerCase());
+    const keywords = (r.keywords || "").split(",").map((k: string) => k.trim().toLowerCase()).filter((k: string) => k);
     
-    // Check trigger or keywords
+    // Skip default handler
     if (triggerLower === "default") continue;
     
-    if (
-      messageLower.includes(triggerLower) ||
-      keywords.some((k: string) => k && messageLower.includes(k))
-    ) {
-      return {
-        response: r.response,
-        type: r.category,
-      };
+    let score = 0;
+    
+    // Exact trigger match gets highest score
+    if (messageLower.includes(triggerLower)) {
+      score += 50;
+    }
+    
+    // Keyword matches add to score
+    for (const keyword of keywords) {
+      if (keyword && messageLower.includes(keyword)) {
+        score += 10;
+      }
+    }
+    
+    // Track best match
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = r;
     }
   }
 
+  // Use best match if score is high enough
+  if (bestMatch && bestScore >= 10) {
+    return {
+      response: bestMatch.response,
+      type: bestMatch.category,
+    };
+  }
+
   // Check for escalation keywords
-  const escalationKeywords = ["speak to human", "real person", "manager", "supervisor", "agent", "talk to someone"];
+  const escalationKeywords = ["speak to human", "real person", "manager", "supervisor", "agent", "talk to someone", "talk to a person", "customer service"];
   if (escalationKeywords.some(k => messageLower.includes(k))) {
     return {
-      response: responses.find(r => r.trigger === "speak to human")?.response || 
-        "I'll connect you with a human agent. Please provide your name and order number.",
+      response: "I'll connect you with a human agent right away. Please provide your name, order number (if any), and your question. Our team typically responds within minutes during business hours. You can also call us at 0503819000 for immediate assistance.",
       type: "escalation",
       metadata: { requiresEscalation: true },
     };
   }
 
   // Check for complaint keywords
-  const complaintKeywords = ["complaint", "unhappy", "disappointed", "terrible", "worst", "awful"];
+  const complaintKeywords = ["complaint", "unhappy", "disappointed", "terrible", "worst", "awful", "refund request", "cancel order"];
   if (complaintKeywords.some(k => messageLower.includes(k))) {
     return {
-      response: responses.find(r => r.trigger === "complaint")?.response ||
-        "I'm sorry to hear about your experience. Let me escalate this to our management team immediately.",
+      response: "I'm really sorry to hear about your experience. Your feedback is important to us. Let me connect you with our management team who will address this immediately. Please provide your order number and phone number. You can also call 0503819000 and ask to speak to a manager.",
       type: "support",
       metadata: { requiresEscalation: true },
     };
   }
 
   // Check for order-related queries
-  const orderKeywords = ["order", "track", "delivery", "shipping", "arrived", "arriving"];
+  const orderKeywords = ["order", "track", "delivery", "shipping", "arrived", "arriving", "where is my", "when will"];
   if (orderKeywords.some(k => messageLower.includes(k))) {
     return {
-      response: responses.find(r => r.trigger === "order status")?.response ||
-        "To check your order status, please provide your order number (format: RC-XXXXX) or your phone number.",
+      response: "To check your order status, please provide your order number (format: RC-XXXXX). You can also track using your phone number used during checkout. Need help? Call 0503819000!",
       type: "order_query",
     };
   }
@@ -75,12 +93,12 @@ function findBestResponse(
   const defaultResponse = responses.find(r => r.trigger === "default");
   return {
     response: defaultResponse?.response ||
-      "Thank you for contacting us! Could you please provide more details about your question?",
+      "Thank you for contacting RIGHTCLICK COMPUTER DIGITALS! I can help you with product information, order tracking, payments, and technical support. Could you please provide more details? Call 0503819000 for immediate assistance.",
     type: "general",
   };
 }
 
-// Fallback responses when database is empty
+// Fallback responses when database is empty - improved with more accurate responses
 function getFallbackResponse(userMessage: string): { response: string; type: string; metadata?: any } {
   const messageLower = userMessage.toLowerCase();
   
@@ -95,15 +113,15 @@ function getFallbackResponse(userMessage: string): { response: string; type: str
   // Order status
   if (messageLower.includes("order") || messageLower.includes("track") || messageLower.includes("delivery")) {
     return {
-      response: "To check your order status, please provide your order number (format: RC-XXXXX) or your phone number. You can also call us at 0503819000 for immediate assistance.",
+      response: "To check your order status, please provide your order number (format: RC-XXXXX). You can also call us at 0503819000 for immediate assistance.",
       type: "order_query",
     };
   }
   
-  // Payment
+  // Payment - updated with specific Ghana providers
   if (messageLower.includes("payment") || messageLower.includes("pay") || messageLower.includes("momo")) {
     return {
-      response: "We accept Mobile Money (MoMo), Bank Transfer, Card Payments, and Cash. To pay via MoMo, send amount to 0503819000 with your order number as reference.",
+      response: "We accept Mobile Money (MTN, Telecel, AirtelTigo), Bank Transfer, Card Payments, and Cash. To pay via MoMo, send amount to 0503819000 with your order number as reference.",
       type: "payment",
     };
   }
@@ -194,11 +212,12 @@ export async function POST(request: NextRequest) {
     let metadata = aiResult?.metadata;
     let escalated = false;
 
-    // If we found an order match in the message, look up the order
-    const orderMatch = message.match(/RC-[A-Z0-9-]+/i) || message.match(/TRK-[A-Z0-9-]+/i);
+    // If we found an order match in the message, look up the order - improved order detection
+    // Match both RC- and TRK- prefixed order/tracking numbers
+    const orderMatch = message.match(/RC-[A-Z0-9]{5,}/i) || message.match(/TRK-[A-Z0-9]{5,}/i) || message.match(/order[:\s]+([A-Z0-9-]+)/i);
     if (orderMatch) {
       try {
-        const orderNumber = orderMatch[0].toUpperCase();
+        const orderNumber = (orderMatch[1] || orderMatch[0]).toUpperCase();
         const orderResults = await db.select().from(orders).where(eq(orders.orderNumber, orderNumber));
         
         if (orderResults.length > 0) {
@@ -206,16 +225,34 @@ export async function POST(request: NextRequest) {
           const items = JSON.parse(order.items as string);
           const itemList = items.map((item: any) => `• ${item.name} x${item.quantity} - ₵${item.price * item.quantity}`).join("\n");
           
+          // Format status for better readability
+          const statusEmoji: Record<string, string> = {
+            pending: "⏳ Pending",
+            confirmed: "✅ Confirmed",
+            processing: "📦 Processing",
+            shipped: "🚚 Shipped",
+            delivered: "🎉 Delivered",
+            cancelled: "❌ Cancelled"
+          };
+          
+          const paymentStatusEmoji: Record<string, string> = {
+            pending: "⏳ Pending",
+            paid: "✅ Paid",
+            failed: "❌ Failed",
+            refunded: "↩️ Refunded"
+          };
+          
           responseText = `**Order Details for ${order.orderNumber}**\n\n` +
-            `**Status:** ${order.status}\n` +
+            `**Status:** ${statusEmoji[order.status] || order.status}\n` +
             `**Tracking Number:** ${order.trackingNumber}\n` +
-            `**Payment Status:** ${order.paymentStatus}\n\n` +
+            `**Payment Status:** ${paymentStatusEmoji[order.paymentStatus] || order.paymentStatus}\n\n` +
             `**Items:**\n${itemList}\n\n` +
             `**Total:** ₵${order.totalAmount}\n\n` +
+            `**Shipping Address:** ${order.shippingAddress || "Not provided"}\n\n` +
             `Contact us at 0503819000 for any questions about your order.`;
           messageType = "order_query";
         } else {
-          responseText = `I couldn't find an order with number "${orderNumber}". Please check your order number and try again.`;
+          responseText = `I couldn't find an order with number "${orderNumber}". Please check your order number and try again, or call 0503819000 for assistance.`;
           messageType = "order_query";
         }
       } catch (orderError) {

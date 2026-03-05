@@ -169,7 +169,7 @@ export default function ChatManagementPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
       </div>
     );
   }
@@ -198,7 +198,7 @@ export default function ChatManagementPage() {
           onClick={() => setActiveTab("sessions")}
           className={`px-4 py-2 font-medium transition-colors ${
             activeTab === "sessions"
-              ? "border-b-2 border-violet-500 text-violet-600"
+              ? "border-b-2 border-orange-500 text-orange-600"
               : "text-gray-500 hover:text-gray-700"
           }`}
         >
@@ -208,7 +208,7 @@ export default function ChatManagementPage() {
           onClick={() => setActiveTab("responses")}
           className={`px-4 py-2 font-medium transition-colors ${
             activeTab === "responses"
-              ? "border-b-2 border-violet-500 text-violet-600"
+              ? "border-b-2 border-orange-500 text-orange-600"
               : "text-gray-500 hover:text-gray-700"
           }`}
         >
@@ -218,7 +218,7 @@ export default function ChatManagementPage() {
           onClick={() => setActiveTab("settings")}
           className={`px-4 py-2 font-medium transition-colors ${
             activeTab === "settings"
-              ? "border-b-2 border-violet-500 text-violet-600"
+              ? "border-b-2 border-orange-500 text-orange-600"
               : "text-gray-500 hover:text-gray-700"
           }`}
         >
@@ -242,9 +242,9 @@ export default function ChatManagementPage() {
                   <button
                     key={session.sessionId}
                     onClick={() => handleSessionClick(session)}
-                    className={`w-full p-4 text-left border-b hover:bg-violet-50 transition-colors ${
+                    className={`w-full p-4 text-left border-b hover:bg-orange-50 transition-colors ${
                       selectedSession?.sessionId === session.sessionId
-                        ? "bg-violet-50"
+                        ? "bg-orange-50"
                         : ""
                     }`}
                   >
@@ -308,7 +308,7 @@ export default function ChatManagementPage() {
                             ? "bg-blue-500 text-white"
                             : msg.sender === "ai"
                             ? "bg-gray-100 text-gray-800"
-                            : "bg-violet-100 text-gray-800"
+                            : "bg-orange-100 text-gray-800"
                         }`}
                       >
                         <p className="text-xs font-semibold mb-1 opacity-75">
@@ -330,7 +330,7 @@ export default function ChatManagementPage() {
                       onChange={(e) => setAdminMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && sendAdminMessage()}
                       placeholder="Type your reply..."
-                      className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-violet-500"
+                      className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
                     />
                     <button
                       onClick={sendAdminMessage}
@@ -437,7 +437,7 @@ export default function ChatManagementPage() {
                       </button>
                     </td>
                     <td className="px-4 py-3">
-                      <button className="text-violet-600 hover:text-violet-700 text-sm font-medium">
+                      <button className="text-orange-600 hover:text-orange-700 text-sm font-medium">
                         Edit
                       </button>
                     </td>
@@ -471,7 +471,7 @@ export default function ChatManagementPage() {
                   }
                   className={`w-12 h-6 rounded-full transition-colors ${
                     aiSettings.ai_enabled === "true"
-                      ? "bg-violet-500"
+                      ? "bg-orange-500"
                       : "bg-gray-300"
                   }`}
                 >
@@ -499,7 +499,7 @@ export default function ChatManagementPage() {
                   onChange={(e) => setAiSettings((prev) => ({ ...prev, welcome_message: e.target.value }))}
                   onBlur={(e) => updateAiSetting("welcome_message", e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-violet-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
                   placeholder="Enter welcome message..."
                 />
               </div>
@@ -518,7 +518,7 @@ export default function ChatManagementPage() {
                   value={aiSettings.company_phone || ""}
                   onChange={(e) => setAiSettings((prev) => ({ ...prev, company_phone: e.target.value }))}
                   onBlur={(e) => updateAiSetting("company_phone", e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-violet-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
                   placeholder="0503819000"
                 />
               </div>
@@ -531,7 +531,7 @@ export default function ChatManagementPage() {
                   value={aiSettings.company_email || ""}
                   onChange={(e) => setAiSettings((prev) => ({ ...prev, company_email: e.target.value }))}
                   onBlur={(e) => updateAiSetting("company_email", e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-violet-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
                   placeholder="info@rightclickdigitals.com"
                 />
               </div>
@@ -544,7 +544,7 @@ export default function ChatManagementPage() {
                   value={aiSettings.business_hours || ""}
                   onChange={(e) => setAiSettings((prev) => ({ ...prev, business_hours: e.target.value }))}
                   onBlur={(e) => updateAiSetting("business_hours", e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-violet-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
                   placeholder="Monday - Friday: 8 AM - 6 PM"
                 />
               </div>

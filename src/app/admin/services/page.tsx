@@ -13,7 +13,7 @@ export default async function AdminServicesPage() {
 
   const categoryColors: Record<string, string> = {
     repair: "bg-red-500/10 text-red-400",
-    installation: "bg-violet-500/10 text-violet-400",
+    installation: "bg-orange-500/10 text-orange-400",
     maintenance: "bg-green-500/10 text-green-400",
     consultation: "bg-purple-500/10 text-purple-400",
     other: "bg-gray-500/10 text-gray-400",
@@ -28,7 +28,7 @@ export default async function AdminServicesPage() {
         </div>
         <Link
           href="/admin/services/new"
-          className="bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
+          className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
         >
           <span>+</span> Add Service
         </Link>
@@ -39,7 +39,7 @@ export default async function AdminServicesPage() {
           <div className="text-5xl mb-4">🔧</div>
           <h3 className="text-white text-xl font-semibold mb-2">No Services Yet</h3>
           <p className="text-gray-400 mb-6">Start by adding your first service.</p>
-          <Link href="/admin/services/new" className="bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl transition">
+          <Link href="/admin/services/new" className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl transition">
             Add First Service
           </Link>
         </div>
@@ -73,7 +73,7 @@ export default async function AdminServicesPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-violet-400 font-semibold">₵{service.price.toFixed(2)}</span>
+                      <span className="text-orange-400 font-semibold">₵{service.price.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-gray-400 text-sm">{service.duration || "—"}</span>

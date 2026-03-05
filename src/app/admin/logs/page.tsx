@@ -19,7 +19,7 @@ export default async function ActivityLogsPage() {
     LOGIN_FAILED: "bg-red-500/10 text-red-400",
     LOGIN_BLOCKED: "bg-red-600/10 text-red-500",
     LOGOUT: "bg-gray-700 text-gray-400",
-    CREATE: "bg-violet-500/10 text-violet-400",
+    CREATE: "bg-orange-500/10 text-orange-400",
     UPDATE: "bg-yellow-500/10 text-yellow-400",
     DELETE: "bg-red-500/10 text-red-400",
   };
@@ -35,7 +35,7 @@ export default async function ActivityLogsPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
           { label: "Total Events", value: logs.length, color: "text-white" },
-          { label: "Login Events", value: logs.filter(l => l.action.startsWith("LOGIN")).length, color: "text-violet-400" },
+          { label: "Login Events", value: logs.filter(l => l.action.startsWith("LOGIN")).length, color: "text-orange-400" },
           { label: "Data Changes", value: logs.filter(l => ["CREATE", "UPDATE", "DELETE"].includes(l.action)).length, color: "text-yellow-400" },
           { label: "Failed Logins", value: logs.filter(l => l.action === "LOGIN_FAILED").length, color: "text-red-400" },
         ].map((stat) => (

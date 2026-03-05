@@ -82,7 +82,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
   const statusColors: Record<string, string> = {
     pending: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
     confirmed: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-    processing: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+    processing: "bg-orange-500/10 text-orange-400 border-orange-500/20",
     shipped: "bg-purple-500/10 text-purple-400 border-purple-500/20",
     delivered: "bg-green-500/10 text-green-400 border-green-500/20",
     cancelled: "bg-red-500/10 text-red-400 border-red-500/20",
@@ -109,12 +109,12 @@ export default async function OrdersPage({ searchParams }: PageProps) {
             name="search"
             defaultValue={params.search || ""}
             placeholder="Search orders..."
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none"
+            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           />
           <select
             name="status"
             defaultValue={params.status || ""}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-violet-500 focus:outline-none"
+            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
           >
             <option value="">All Status</option>
             <option value="pending">Pending</option>
@@ -127,7 +127,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
           <select
             name="paymentStatus"
             defaultValue={params.paymentStatus || ""}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-violet-500 focus:outline-none"
+            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
           >
             <option value="">All Payments</option>
             <option value="pending">Pending</option>
@@ -137,7 +137,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
           </select>
           <button
             type="submit"
-            className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg transition"
+            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition"
           >
             Filter
           </button>
@@ -163,8 +163,8 @@ export default async function OrdersPage({ searchParams }: PageProps) {
           <div className="text-2xl font-bold text-purple-400">{stats.shipped}</div>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-          <div className="text-violet-400 text-sm">Delivered</div>
-          <div className="text-2xl font-bold text-violet-400">{stats.delivered}</div>
+          <div className="text-orange-400 text-sm">Delivered</div>
+          <div className="text-2xl font-bold text-orange-400">{stats.delivered}</div>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
           <div className="text-gray-400 text-sm">Revenue</div>
@@ -181,7 +181,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
               type="date"
               name="dateFrom"
               defaultValue={params.dateFrom || ""}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-violet-500 focus:outline-none"
+              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
             />
           </div>
           <div>
@@ -190,13 +190,13 @@ export default async function OrdersPage({ searchParams }: PageProps) {
               type="date"
               name="dateTo"
               defaultValue={params.dateTo || ""}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-violet-500 focus:outline-none"
+              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
             />
           </div>
           <div className="flex gap-2">
             <button
               type="submit"
-              className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg transition"
+              className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition"
             >
               Apply Date Filter
             </button>
@@ -287,7 +287,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
                       <td className="px-6 py-4">
                         <a
                           href={`/admin/orders/${order.orderNumber}`}
-                          className="text-violet-400 hover:text-violet-300 text-sm"
+                          className="text-orange-400 hover:text-orange-300 text-sm"
                         >
                           View Details
                         </a>
@@ -313,7 +313,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
           </a>
           <a
             href={`/api/admin/export?type=orders&format=json${params.status ? `&status=${params.status}` : ''}${params.paymentStatus ? `&paymentStatus=${params.paymentStatus}` : ''}`}
-            className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2"
+            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2"
           >
             📋 Export JSON
           </a>

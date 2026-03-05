@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 interface Message {
   id: string;
@@ -24,8 +24,10 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isAiMode, setIsAiMode] = useState(true);
+  const [connectionError, setConnectionError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const sessionInitialized = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Initialize chat session
   useEffect(() => {
@@ -34,13 +36,26 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
     
     const initSession = async () => {
       try {
+        // Cancel any pending request
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
+        abortControllerRef.current = new AbortController();
+        
         const response = await fetch("/api/chat/session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: abortControllerRef.current.signal
         });
+        
+        if (!response.ok) {
+          throw new Error("Failed to create session");
+        }
+        
         const data = await response.json();
         if (data.sessionId) {
           setSessionId(data.sessionId);
+          setConnectionError(false);
           
           // Add welcome message if this is a new session
           if (data.welcomeMessage) {
@@ -55,24 +70,34 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
             ]);
           }
         }
-      } catch (error) {
-        console.error("Failed to initialize chat session:", error);
-        // Add fallback welcome message on error
-        setMessages([
-          {
-            id: Date.now().toString(),
-            text: "Hello! Welcome to RIGHTCLICK COMPUTER DIGITALS. How can I help you today?",
-            sender: "ai",
-            senderName: "RIGHTCLICK Assistant",
-            timestamp: new Date(),
-          },
-        ]);
+      } catch (error: any) {
+        if (error.name !== "AbortError") {
+          console.error("Failed to initialize chat session:", error);
+          setConnectionError(true);
+          // Add fallback welcome message on error
+          setMessages([
+            {
+              id: Date.now().toString(),
+              text: "Hello! Welcome to RIGHTCLICK COMPUTER DIGITALS. How can I help you today?",
+              sender: "ai",
+              senderName: "RIGHTCLICK Assistant",
+              timestamp: new Date(),
+            },
+          ]);
+        }
       }
     };
 
     if (isOpen && !sessionId) {
       initSession();
     }
+    
+    // Cleanup on unmount
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, [isOpen, sessionId]);
 
   // Scroll to bottom when messages change
@@ -80,8 +105,8 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!inputText.trim() || !sessionId) return;
+  const sendMessage = useCallback(async () => {
+    if (!inputText.trim() || !sessionId || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -93,8 +118,15 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
     setMessages((prev) => [...prev, userMessage]);
     setInputText("");
     setIsLoading(true);
+    setConnectionError(false);
 
     try {
+      // Cancel any pending request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      abortControllerRef.current = new AbortController();
+      
       const response = await fetch("/api/chat/message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -104,7 +136,12 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
           productId,
           cartItems,
         }),
+        signal: abortControllerRef.current.signal
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
 
       const data = await response.json();
 
@@ -124,27 +161,64 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
       if (data.escalated) {
         setIsAiMode(false);
       }
-    } catch (error) {
-      console.error("Failed to send message:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          text: "Sorry, I'm having trouble connecting. Please try again or call us at 0503819000.",
-          sender: "ai",
-          senderName: "RIGHTCLICK Assistant",
-          timestamp: new Date(),
-        },
-      ]);
+    } catch (error: any) {
+      if (error.name !== "AbortError") {
+        console.error("Failed to send message:", error);
+        setConnectionError(true);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            text: "Sorry, I'm having trouble connecting. Please try again or call us at 0503819000.",
+            sender: "ai",
+            senderName: "RIGHTCLICK Assistant",
+            timestamp: new Date(),
+          },
+        ]);
+      }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [inputText, sessionId, productId, cartItems, isLoading]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
+    }
+  };
+
+  const handleRetry = () => {
+    setConnectionError(false);
+    sessionInitialized.current = false;
+    if (isOpen) {
+      const initSession = async () => {
+        try {
+          const response = await fetch("/api/chat/session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await response.json();
+          if (data.sessionId) {
+            setSessionId(data.sessionId);
+            setConnectionError(false);
+            if (data.welcomeMessage) {
+              setMessages([
+                {
+                  id: Date.now().toString(),
+                  text: data.welcomeMessage,
+                  sender: "ai",
+                  senderName: "RIGHTCLICK Assistant",
+                  timestamp: new Date(),
+                },
+              ]);
+            }
+          }
+        } catch (error) {
+          console.error("Retry failed:", error);
+        }
+      };
+      initSession();
     }
   };
 
@@ -157,10 +231,10 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button - Orange theme */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 bg-violet-500 hover:bg-violet-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 bg-orange-500 hover:bg-orange-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
         aria-label="Open chat"
       >
         {isOpen ? (
@@ -196,11 +270,11 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
         )}
       </button>
 
-      {/* Chat Window */}
+      {/* Chat Window - Orange theme */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-40 w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
           {/* Header */}
-          <div className="bg-gradient-to-r from-violet-500 to-violet-600 p-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                 <svg
@@ -220,7 +294,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
               </div>
               <div>
                 <h3 className="text-white font-semibold">RIGHTCLICK Assistant</h3>
-                <p className="text-violet-100 text-xs">
+                <p className="text-orange-100 text-xs">
                   {isAiMode ? "AI Powered" : "Human Support"}
                 </p>
               </div>
@@ -267,7 +341,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                     msg.sender === "customer"
-                      ? "bg-violet-500 text-white rounded-br-md"
+                      ? "bg-orange-500 text-white rounded-br-md"
                       : msg.sender === "admin"
                       ? "bg-blue-500 text-white rounded-bl-md"
                       : "bg-white text-gray-800 rounded-bl-md shadow-sm border"
@@ -282,7 +356,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                   <p
                     className={`text-xs mt-1 ${
                       msg.sender === "customer"
-                        ? "text-violet-100"
+                        ? "text-orange-100"
                         : "text-gray-400"
                     }`}
                   >
@@ -342,12 +416,12 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-full focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 text-sm"
+                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-full focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 text-sm"
               />
               <button
                 onClick={sendMessage}
                 disabled={!inputText.trim() || isLoading}
-                className="bg-violet-500 hover:bg-violet-600 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+                className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

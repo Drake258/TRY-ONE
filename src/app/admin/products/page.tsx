@@ -12,11 +12,11 @@ export default async function AdminProductsPage() {
   const allProducts = await getProducts();
 
   const categoryColors: Record<string, string> = {
-    laptop: "bg-violet-500/10 text-violet-400",
+    laptop: "bg-orange-500/10 text-orange-400",
     desktop: "bg-purple-500/10 text-purple-400",
     accessory: "bg-green-500/10 text-green-400",
     part: "bg-yellow-500/10 text-yellow-400",
-    service: "bg-violet-500/10 text-violet-400",
+    service: "bg-orange-500/10 text-orange-400",
   };
 
   return (
@@ -28,7 +28,7 @@ export default async function AdminProductsPage() {
         </div>
         <Link
           href="/admin/products/new"
-          className="bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
+          className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2"
         >
           <span>+</span> Add Product
         </Link>
@@ -39,7 +39,7 @@ export default async function AdminProductsPage() {
           <div className="text-5xl mb-4">📦</div>
           <h3 className="text-white text-xl font-semibold mb-2">No Products Yet</h3>
           <p className="text-gray-400 mb-6">Start by adding your first product.</p>
-          <Link href="/admin/products/new" className="bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl transition">
+          <Link href="/admin/products/new" className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl transition">
             Add First Product
           </Link>
         </div>
@@ -80,7 +80,7 @@ export default async function AdminProductsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-violet-400 font-semibold">₵{product.price.toFixed(2)}</span>
+                      <span className="text-orange-400 font-semibold">₵{product.price.toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs px-2 py-1 rounded-full ${product.inStock ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>
