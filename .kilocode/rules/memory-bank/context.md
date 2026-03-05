@@ -86,11 +86,14 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `src/app/admin/page.tsx` | Admin dashboard | ✅ Ready |
 | `src/app/admin/products/` | Product management | ✅ Ready |
 | `src/app/admin/services/` | Service management | ✅ Ready |
+| `src/app/admin/orders/` | Order management | ✅ Ready |
+| `src/app/admin/stock/` | Stock management | ✅ Ready |
+| `src/app/admin/coupons/` | Coupon management | ✅ Ready |
 | `src/app/admin/users/` | User management | ✅ Ready |
 | `src/app/admin/logs/page.tsx` | Activity audit logs | ✅ Ready |
-| `src/app/admin/reports/page.tsx` | Reports & CSV export | ✅ Ready |
+| `src/app/admin/reports/page.tsx` | Reports & analytics | ✅ Ready |
 | `src/app/admin/settings/page.tsx` | System settings | ✅ Ready |
-| `src/db/schema.ts` | DB schema (6 tables) | ✅ Ready |
+| `src/db/schema.ts` | DB schema (15 tables) | ✅ Ready |
 | `src/db/seed.ts` | Seed data + admin user | ✅ Ready |
 | `src/lib/auth.ts` | Auth utilities | ✅ Ready |
 | `src/components/admin/` | Admin UI components | ✅ Ready |
@@ -110,6 +113,10 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `ai_responses` | AI response templates |
 | `ai_settings` | AI assistant configuration |
 | `orders` | Customer orders with tracking numbers |
+| `stock_history` | Stock change history (sales, restocks, adjustments) |
+| `stock_alerts` | Low stock and out-of-stock alerts |
+| `coupons` | Discount coupon codes |
+| `wishlist` | Customer wishlist items |
 
 ## Admin Credentials
 
@@ -133,6 +140,8 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `/api/admin/users/[id]` | PATCH | Update user status/role |
 | `/api/admin/settings` | POST | Update system settings |
 | `/api/admin/export` | GET | Export CSV data |
+| `/api/admin/stock` | GET/POST/PATCH | Stock history and alerts management |
+| `/api/admin/coupons` | GET/POST/PUT/DELETE | Coupon management |
 | `/api/products` | GET | Public products for customers |
 | `/api/chat/session` | POST | Create chat session |
 | `/api/chat/message` | POST | Send chat message |
@@ -142,6 +151,8 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | `/api/admin/ai-settings` | GET/POST | Manage AI settings |
 | `/api/orders` | POST/GET | Create/lookup orders |
 | `/api/orders/[id]` | GET/PATCH | Get/update order by order number |
+| `/api/coupons/validate` | POST | Validate coupon code |
+| `/api/wishlist` | GET/POST/DELETE | Wishlist management |
 
 ## Session History
 
@@ -160,3 +171,9 @@ The application is a complete marketing and management software for RIGHTCLICK C
 | 2026-03-05 | Fix migration journal: add missing entries for orders tables and password change field |
 | 2026-03-05 | Add specific payment method options: MTN, Telecel, AirtelTigo, Visa/Card to checkout |
 | 2026-03-05 | Fix AI Assistant stability and accuracy, change color scheme to orange and white throughout |
+| 2026-03-05 | Add inventory/stock management: stock_quantity, low_stock_threshold, stock_history, stock_alerts tables |
+| 2026-03-05 | Add auto stock reduction on order placement, low stock alerts |
+| 2026-03-05 | Add admin Stock page for stock history and alerts management |
+| 2026-03-05 | Add coupons management: create/edit/delete/toggle coupons, coupon validation API |
+| 2026-03-05 | Add wishlist API for customers to save products |
+| 2026-03-05 | Enhance sales analytics in reports: daily sales, orders by status, payment stats, recent orders |
