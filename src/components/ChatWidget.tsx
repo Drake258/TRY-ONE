@@ -347,7 +347,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
           </div>
 
           {/* Messages */}
-          <div className="h-80 overflow-y-auto p-4 bg-gray-50">
+          <div className="h-96 overflow-y-auto p-4 bg-gray-50">
             {messages.length === 0 && (
               <div className="text-center text-gray-500 py-8">
                 <svg
@@ -378,25 +378,25 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 }`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                  className={`max-w-[85%] rounded-2xl px-5 py-4 ${
                     msg.sender === "customer"
-                      ? "bg-orange-500 text-white rounded-br-md"
+                      ? "bg-orange-600 text-white rounded-br-md"
                       : msg.sender === "admin"
-                      ? "bg-blue-500 text-white rounded-bl-md"
-                      : "bg-white text-gray-800 rounded-bl-md shadow-sm border"
+                      ? "bg-blue-600 text-white rounded-bl-md"
+                      : "bg-white text-gray-900 rounded-bl-md shadow-md border-2 border-orange-200"
                   }`}
                 >
                   {msg.sender !== "customer" && (
-                    <p className="text-xs font-semibold mb-1 text-gray-500">
+                    <p className="text-sm font-bold mb-2 text-gray-600">
                       {msg.senderName}
                     </p>
                   )}
-                  <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                  <p className="text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
                   <p
-                    className={`text-xs mt-1 ${
+                    className={`text-xs mt-2 ${
                       msg.sender === "customer"
-                        ? "text-orange-100"
-                        : "text-gray-400"
+                        ? "text-orange-200"
+                        : "text-gray-500"
                     }`}
                   >
                     {formatTime(msg.timestamp)}
@@ -455,7 +455,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-full focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 text-sm"
+                className="flex-1 px-5 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 text-base"
               />
               <button
                 onClick={sendMessage}
