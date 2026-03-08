@@ -42,6 +42,44 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
         }
         abortControllerRef.current = new AbortController();
         
+        // Check for existing session in localStorage
+        const storedSessionId = localStorage.getItem("chatSessionId");
+        
+        let sessionIdToUse = storedSessionId;
+        
+        // If we have a stored session, try to fetch previous messages
+        if (storedSessionId) {
+          try {
+            const msgsRes = await fetch(`/api/chat/session?sessionId=${storedSessionId}`, {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              signal: abortControllerRef.current.signal
+            });
+            
+            if (msgsRes.ok) {
+              const msgsData = await msgsRes.json();
+              if (msgsData.messages && msgsData.messages.length > 0) {
+                // Load previous messages
+                const loadedMessages = msgsData.messages.map((msg: any) => ({
+                  id: msg.id.toString(),
+                  text: msg.message,
+                  sender: msg.sender as "customer" | "ai" | "admin",
+                  senderName: msg.senderName || "RIGHTCLICK Assistant",
+                  timestamp: new Date(msg.createdAt),
+                  type: msg.messageType as "text" | "order_query" | "product_recommendation" | "escalation",
+                }));
+                setMessages(loadedMessages);
+                setSessionId(storedSessionId);
+                setConnectionError(false);
+                return; // Don't create new session, use existing one
+              }
+            }
+          } catch (err) {
+            console.log("No previous session found, creating new one");
+          }
+        }
+        
+        // Create new session if no existing one or no messages
         const response = await fetch("/api/chat/session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -55,6 +93,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
         const data = await response.json();
         if (data.sessionId) {
           setSessionId(data.sessionId);
+          localStorage.setItem("chatSessionId", data.sessionId); // Store for persistence
           setConnectionError(false);
           
           // Add welcome message if this is a new session

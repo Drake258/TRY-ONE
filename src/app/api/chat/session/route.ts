@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { chatSessions, aiSettings } from "@/db/schema";
+import { chatSessions, chatMessages, aiSettings } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(request: NextRequest) {
@@ -55,9 +55,25 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Get active sessions count
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get("sessionId");
+    
+    // If sessionId is provided, return messages for that session
+    if (sessionId) {
+      const messages = await db
+        .select()
+        .from(chatMessages)
+        .where(eq(chatMessages.sessionId, sessionId));
+      
+      return NextResponse.json({
+        success: true,
+        messages,
+      });
+    }
+    
+    // Otherwise, get active sessions count
     const sessions = await db
       .select()
       .from(chatSessions)
