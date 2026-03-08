@@ -25,6 +25,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isAiMode, setIsAiMode] = useState(true);
   const [connectionError, setConnectionError] = useState(false);
+  const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const sessionInitialized = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -158,6 +159,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
     setInputText("");
     setIsLoading(true);
     setConnectionError(false);
+    setShowTypingIndicator(true); // Show typing indicator
 
     try {
       // Cancel any pending request
@@ -195,6 +197,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
           metadata: data.metadata,
         };
         setMessages((prev) => [...prev, aiMessage]);
+        setShowTypingIndicator(false); // Hide typing indicator
       }
 
       if (data.escalated) {
@@ -214,6 +217,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
             timestamp: new Date(),
           },
         ]);
+        setShowTypingIndicator(false); // Hide typing indicator on error
       }
     } finally {
       setIsLoading(false);
@@ -408,10 +412,11 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
               <div className="flex justify-start mb-4">
                 <div className="bg-white rounded-2xl rounded-bl-md px-4 py-3 shadow-sm border">
                   <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+                    <span className="w-2 h-2 bg-orange-500 rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-orange-500 rounded-full animate-bounce delay-100"></span>
+                    <span className="w-2 h-2 bg-orange-500 rounded-full animate-bounce delay-200"></span>
                   </div>
+                  <p className="text-xs text-gray-500 mt-2">RIGHTCLICK is typing...</p>
                 </div>
               </div>
             )}
@@ -419,48 +424,66 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
           </div>
 
           {/* Quick Actions */}
-          <div className="px-4 py-2 bg-white border-t flex gap-2 overflow-x-auto">
+          <div className="px-4 py-2 bg-gradient-to-r from-orange-50 to-white border-t flex gap-2 overflow-x-auto">
             <button
-              onClick={() => setInputText("I want to check my order status")}
-              className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors"
+              onClick={() => {
+                setInputText("I want to check my order status");
+                setTimeout(() => sendMessage(), 100);
+              }}
+              className="text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors font-medium"
             >
-              Track Order
+              📦 Track Order
             </button>
             <button
-              onClick={() => setInputText("What are your payment methods?")}
-              className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors"
+              onClick={() => {
+                setInputText("What are your payment methods?");
+                setTimeout(() => sendMessage(), 100);
+              }}
+              className="text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors font-medium"
             >
-              Payment Info
+              💳 Payment
             </button>
             <button
-              onClick={() => setInputText("Tell me about shipping and delivery")}
-              className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors"
+              onClick={() => {
+                setInputText("Tell me about shipping and delivery");
+                setTimeout(() => sendMessage(), 100);
+              }}
+              className="text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors font-medium"
             >
-              Shipping
+              🚚 Shipping
             </button>
             <button
-              onClick={() => setInputText("I need help with a technical issue")}
-              className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors"
+              onClick={() => {
+                setInputText("Show me available products");
+                setTimeout(() => sendMessage(), 100);
+              }}
+              className="text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 px-3 py-1.5 rounded-full whitespace-nowrap transition-colors font-medium"
             >
-              Tech Support
+              🖥️ Products
             </button>
           </div>
 
           {/* Input */}
           <div className="p-4 bg-white border-t">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="flex-1 px-5 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 text-base"
-              />
+            <div className="flex gap-2 items-end">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your message..."
+                  className="w-full px-5 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 text-base"
+                  maxLength={500}
+                />
+                <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-xs ${inputText.length > 450 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                  {inputText.length}/500
+                </span>
+              </div>
               <button
                 onClick={sendMessage}
                 disabled={!inputText.trim() || isLoading}
-                className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+                className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white rounded-full w-12 h-12 flex items-center justify-center transition-colors shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
