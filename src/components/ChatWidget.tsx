@@ -380,7 +380,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                 <div
                   className={`max-w-[85%] rounded-2xl px-5 py-4 ${
                     msg.sender === "customer"
-                      ? "bg-orange-600 text-white rounded-br-md"
+                      ? "bg-blue-600 text-white rounded-br-md"
                       : msg.sender === "admin"
                       ? "bg-blue-600 text-white rounded-bl-md"
                       : "bg-white text-gray-900 rounded-bl-md shadow-md border-2 border-orange-200"
@@ -395,7 +395,7 @@ export default function ChatWidget({ productId, cartItems }: ChatWidgetProps) {
                   <p
                     className={`text-xs mt-2 ${
                       msg.sender === "customer"
-                        ? "text-orange-200"
+                        ? "text-blue-200"
                         : "text-gray-500"
                     }`}
                   >
